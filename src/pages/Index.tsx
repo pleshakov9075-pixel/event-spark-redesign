@@ -54,7 +54,7 @@ const Index = () => {
         {/* Background image */}
         <div className="absolute inset-0">
           <img src="/images/hero-luxury-bg.jpg" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-background/60" />
+          <div className="absolute inset-0 bg-background/40" />
         </div>
 
         <motion.div
@@ -121,23 +121,24 @@ const Index = () => {
                       transition={{ type: "spring", stiffness: 400, damping: 20 }}
                       className={`relative rounded-2xl overflow-hidden ${card.border} ${card.shadow} ${card.hoverShadow} transition-shadow duration-500`}
                     >
-                      {/* Card image */}
-                      <div className="absolute inset-0">
+                      {/* Card image - fixed height */}
+                      <div className="relative h-[180px] md:h-[200px] overflow-hidden">
                         <img src={card.image} alt={card.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-background/70 group-hover:bg-background/60 transition-colors duration-500" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                        <Icon className="absolute top-5 left-6 w-7 h-7 text-primary drop-shadow-lg group-hover:scale-110 transition-transform" />
                       </div>
-                      <div className="relative p-8 md:p-10 min-h-[280px] md:min-h-[300px] flex flex-col">
-                        <Icon className="w-8 h-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
-                        <h2 className="font-display text-2xl md:text-3xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors">
+                      {/* Card content - fixed height */}
+                      <div className="relative p-6 md:p-8 flex flex-col h-[180px] md:h-[180px] bg-card">
+                        <h2 className="font-display text-2xl md:text-3xl font-bold mb-1 text-foreground group-hover:text-primary transition-colors">
                           {card.title}
                         </h2>
-                        <p className="font-display text-sm md:text-base italic text-muted-foreground mb-3">
+                        <p className="font-display text-sm md:text-base italic text-foreground/60 mb-3">
                           {card.tagline}
                         </p>
-                        <p className="font-body text-sm text-muted-foreground/80 leading-relaxed flex-1">
+                        <p className="font-body text-sm text-foreground/70 leading-relaxed flex-1">
                           {card.description}
                         </p>
-                        <div className="mt-6 flex items-center gap-2 text-primary font-body text-sm group-hover:gap-3 transition-all">
+                        <div className="mt-4 flex items-center gap-2 text-primary font-body text-sm font-medium group-hover:gap-3 transition-all">
                           Подробнее
                           <motion.span className="inline-block" animate={{ x: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>→</motion.span>
                         </div>
