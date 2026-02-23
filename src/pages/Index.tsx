@@ -51,19 +51,10 @@ const Index = () => {
     <main className="min-h-screen bg-gradient-dark">
       {/* Hero */}
       <section ref={heroRef} className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
-        {/* Video background */}
+        {/* Background image */}
         <div className="absolute inset-0">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover scale-110"
-            poster="/images/hero-main.jpg"
-          >
-            <source src="/videos/hero-bg.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-background/75" />
+          <img src="/images/hero-luxury-bg.jpg" alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-background/60" />
         </div>
 
         <motion.div
