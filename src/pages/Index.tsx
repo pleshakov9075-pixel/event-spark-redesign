@@ -15,7 +15,7 @@ const cards = [
     tagline: "Амбассадор ярких событий",
     description: "Персональный подход к каждому мероприятию. Создаю атмосферу, в которой гости чувствуют себя свободно.",
     icon: Sparkles,
-    image: "/images/host-stage.jpg",
+    image: "/images/card-host-bg.jpg",
     gradient: "bg-gradient-emerald",
     border: "border-gradient-emerald",
     shadow: "shadow-emerald",
@@ -27,7 +27,7 @@ const cards = [
     tagline: "Творческая лаборатория эмоций",
     description: "Полное сопровождение мероприятий от концепции до финального аккорда. Каждое событие — авторская постановка.",
     icon: Theater,
-    image: "/images/agency-work.jpg",
+    image: "/images/card-agency-bg.jpg",
     gradient: "bg-gradient-wine",
     border: "border-gradient-wine",
     shadow: "shadow-wine",
@@ -45,18 +45,26 @@ const stats = [
 const Index = () => {
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
     <main className="min-h-screen bg-gradient-dark">
       {/* Hero */}
       <section ref={heroRef} className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
-        {/* Parallax background */}
-        <motion.div className="absolute inset-0" style={{ y: heroY }}>
-          <img src="/images/hero-main.jpg" alt="Владимир Башмаков — ведущий" className="w-full h-full object-cover scale-110" />
-          <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
-        </motion.div>
+        {/* Video background */}
+        <div className="absolute inset-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover scale-110"
+            poster="/images/hero-main.jpg"
+          >
+            <source src="/videos/hero-bg.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-background/75" />
+        </div>
 
         <motion.div
           style={{ opacity: heroOpacity }}
@@ -105,7 +113,7 @@ const Index = () => {
           </motion.div>
 
           {/* Cards with images */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-5xl w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-5xl w-full mx-auto">
             {cards.map((card, i) => {
               const Icon = card.icon;
               return (
