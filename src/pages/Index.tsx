@@ -34,10 +34,10 @@ const Index = () => {
     <main className="min-h-screen bg-gradient-dark">
       {/* Hero */}
       <section className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
-        {/* Background effects */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-wine/10 rounded-full blur-[120px]" />
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <img src="/images/hero-main.jpg" alt="Владимир Башмаков — ведущий" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
         </div>
 
         <motion.div
