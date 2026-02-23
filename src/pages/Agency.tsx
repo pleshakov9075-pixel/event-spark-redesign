@@ -108,7 +108,7 @@ const Agency = () => {
       {/* Hero */}
       <section ref={heroRef} className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
         <motion.div className="absolute inset-0" style={{ y: heroY }}>
-          <img src="/images/agency-work.jpg" alt="Art-Box Agency за работой" className="w-full h-full object-cover scale-110" />
+          <img src="/images/agency-hero.jpg" alt="Команда Art-Box Agency" className="w-full h-full object-cover scale-110" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/75 to-background/50" />
         </motion.div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
