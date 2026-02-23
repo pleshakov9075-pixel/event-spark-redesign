@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Gift, Video, MapPin, Scissors, Check, ArrowRight, ArrowLeft } from "lucide-react";
+import { X, Gift, Video, MapPin, Check, ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface CalculatorProps {
@@ -34,14 +34,25 @@ const Calculator = ({ isOpen, onClose, variant = "host" }: CalculatorProps) => {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  const gifts = variant === "host" ? hostGifts : agencyGifts;
+  const isWine = variant === "agency";
+  const gifts = isWine ? agencyGifts : hostGifts;
   const totalSteps = 3;
+
+  const gradientBtn = isWine ? "bg-gradient-wine" : "bg-gradient-emerald";
+  const gradientTitle = isWine ? "text-gradient-gold" : "text-gradient-emerald";
+  const shadowCard = isWine ? "shadow-wine" : "shadow-emerald";
+  const activeClass = isWine
+    ? "border-wine/50 bg-wine/10 shadow-wine"
+    : "border-primary bg-primary/10 shadow-emerald";
+  const activeIcon = isWine ? "text-wine-foreground" : "text-primary";
+  const activeContact = isWine
+    ? "border-wine/50 bg-wine/10 text-wine-foreground"
+    : "border-primary bg-primary/10 text-primary";
+  const progressBg = isWine ? "bg-gradient-wine" : "bg-gradient-emerald";
 
   const handleNext = () => {
     if (step < totalSteps - 1) setStep(step + 1);
-    else {
-      setSubmitted(true);
-    }
+    else setSubmitted(true);
   };
 
   const handleBack = () => {
@@ -71,22 +82,22 @@ const Calculator = ({ isOpen, onClose, variant = "host" }: CalculatorProps) => {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ type: "spring", damping: 25 }}
-        className="relative bg-card border border-border rounded-2xl p-8 md:p-10 max-w-lg w-full shadow-emerald"
+        className={`relative bg-card border border-border rounded-2xl p-6 sm:p-8 md:p-10 max-w-lg w-full ${shadowCard}`}
         onClick={(e) => e.stopPropagation()}
       >
         <button onClick={reset} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors interactive">
           <X className="w-5 h-5" />
         </button>
 
-        <h3 className="font-display text-2xl md:text-3xl mb-2 text-gradient-emerald">Рассчитать стоимость</h3>
+        <h3 className={`font-display text-xl sm:text-2xl md:text-3xl mb-2 ${gradientTitle}`}>Рассчитать стоимость</h3>
 
         {/* Progress bar */}
         {!submitted && (
-          <div className="flex gap-1.5 mb-8">
+          <div className="flex gap-1.5 mb-6 sm:mb-8">
             {Array.from({ length: totalSteps }).map((_, i) => (
               <div
                 key={i}
-                className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= step ? "bg-gradient-emerald" : "bg-muted"}`}
+                className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= step ? progressBg : "bg-muted"}`}
               />
             ))}
           </div>
@@ -98,16 +109,16 @@ const Calculator = ({ isOpen, onClose, variant = "host" }: CalculatorProps) => {
               key="done"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center py-8"
+              className="text-center py-6 sm:py-8"
             >
-              <div className="w-16 h-16 rounded-full bg-gradient-emerald flex items-center justify-center mx-auto mb-4">
+              <div className={`w-16 h-16 rounded-full ${gradientBtn} flex items-center justify-center mx-auto mb-4`}>
                 <Check className="w-8 h-8 text-primary-foreground" />
               </div>
               <h4 className="font-display text-xl mb-2">Спасибо!</h4>
               <p className="text-muted-foreground font-body text-sm mb-6">
                 Мы подготовим персональное предложение и свяжемся с вами в ближайшее время.
               </p>
-              <Button onClick={reset} className="bg-gradient-emerald hover:opacity-90 text-primary-foreground interactive">
+              <Button onClick={reset} className={`${gradientBtn} hover:opacity-90 text-primary-foreground interactive`}>
                 Вернуться на сайт
               </Button>
             </motion.div>
@@ -122,12 +133,10 @@ const Calculator = ({ isOpen, onClose, variant = "host" }: CalculatorProps) => {
                       key={g.id}
                       onClick={() => setData({ ...data, gift: g.id })}
                       className={`p-4 rounded-xl border transition-all text-left interactive ${
-                        data.gift === g.id
-                          ? "border-primary bg-primary/10 shadow-emerald"
-                          : "border-border hover:border-primary/50"
+                        data.gift === g.id ? activeClass : "border-border hover:border-primary/50"
                       }`}
                     >
-                      <Icon className={`w-6 h-6 mb-2 ${data.gift === g.id ? "text-primary" : "text-muted-foreground"}`} />
+                      <Icon className={`w-6 h-6 mb-2 ${data.gift === g.id ? activeIcon : "text-muted-foreground"}`} />
                       <span className="font-body text-sm">{g.label}</span>
                     </button>
                   );
@@ -180,13 +189,13 @@ const Calculator = ({ isOpen, onClose, variant = "host" }: CalculatorProps) => {
               </div>
               <div>
                 <label className="font-body text-sm text-muted-foreground block mb-3">Способ связи</label>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                   {["whatsapp", "telegram", "call"].map((m) => (
                     <button
                       key={m}
                       onClick={() => setData({ ...data, contactMethod: m })}
                       className={`px-4 py-2 rounded-lg border font-body text-sm transition-all interactive ${
-                        data.contactMethod === m ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:border-primary/50"
+                        data.contactMethod === m ? activeContact : "border-border text-muted-foreground hover:border-primary/50"
                       }`}
                     >
                       {m === "whatsapp" ? "WhatsApp" : m === "telegram" ? "Telegram" : "Звонок"}
@@ -199,7 +208,7 @@ const Calculator = ({ isOpen, onClose, variant = "host" }: CalculatorProps) => {
         </AnimatePresence>
 
         {!submitted && (
-          <div className="flex justify-between mt-8">
+          <div className="flex justify-between mt-6 sm:mt-8">
             {step > 0 ? (
               <button onClick={handleBack} className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-body text-sm transition-colors interactive">
                 <ArrowLeft className="w-4 h-4" /> Назад
@@ -208,7 +217,7 @@ const Calculator = ({ isOpen, onClose, variant = "host" }: CalculatorProps) => {
             <Button
               onClick={handleNext}
               disabled={step === 2 && !data.contact}
-              className="bg-gradient-emerald hover:opacity-90 text-primary-foreground gap-2 interactive"
+              className={`${gradientBtn} hover:opacity-90 text-primary-foreground gap-2 interactive`}
             >
               {step === totalSteps - 1 ? "Отправить" : "Далее"} <ArrowRight className="w-4 h-4" />
             </Button>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Mic, Heart, Zap, Smile, Star, Users, Music, Palette, MessageCircle } from "lucide-react";
+import { ArrowLeft, Mic, Heart, Zap, Smile, Star, Users, Music, Palette, MessageCircle, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeading from "@/components/SectionHeading";
@@ -74,18 +74,18 @@ const Host = () => {
     <main className="min-h-screen bg-gradient-dark">
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-40 glass border-b border-border/50">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors interactive font-body text-sm">
-            <ArrowLeft className="w-4 h-4" /> Главная
+            <ArrowLeft className="w-4 h-4" /> <span className="hidden sm:inline">Главная</span>
           </Link>
-          <Button onClick={() => setCalcOpen(true)} size="sm" className="bg-gradient-emerald hover:opacity-90 text-primary-foreground interactive">
+          <Button onClick={() => setCalcOpen(true)} size="sm" className="bg-gradient-emerald hover:opacity-90 text-primary-foreground interactive text-xs sm:text-sm">
             Рассчитать стоимость
           </Button>
         </div>
       </nav>
 
       {/* Hero with parallax */}
-      <section ref={heroRef} className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
+      <section ref={heroRef} className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-16 sm:pt-20 relative overflow-hidden">
         <motion.div className="absolute inset-0" style={{ y: heroY }}>
           <img src="/images/host-hero.png" alt="Владимир Башмаков — ведущий" className="w-full h-full object-cover scale-110" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/40" />
@@ -96,22 +96,22 @@ const Host = () => {
               initial={{ opacity: 0, letterSpacing: "0.5em" }}
               animate={{ opacity: 1, letterSpacing: "0.3em" }}
               transition={{ delay: 0.2, duration: 1 }}
-              className="font-body text-primary text-sm md:text-base tracking-widest uppercase mb-4"
+              className="font-body text-primary text-xs sm:text-sm md:text-base tracking-widest uppercase mb-3 sm:mb-4"
             >
               Ведущий мероприятий
             </motion.p>
-            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6">
               Амбассадор <br />
               <span className="text-gradient-emerald">ярких событий</span>
             </h1>
-            <p className="font-body text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="font-body text-foreground/70 text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2">
               15 лет с микрофоном. Комфортно, интеллигентно, весело, с душой, индивидуально и современно.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-emerald hover:opacity-90 text-primary-foreground text-base px-8 interactive">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-emerald hover:opacity-90 text-primary-foreground text-sm sm:text-base px-6 sm:px-8 interactive">
                 Рассчитать стоимость
               </Button>
-              <Button variant="outline" size="lg" className="border-primary/30 text-primary hover:bg-primary/10 text-base px-8 interactive">
+              <Button variant="outline" size="lg" className="border-primary/30 text-primary hover:bg-primary/10 text-sm sm:text-base px-6 sm:px-8 interactive">
                 Познакомимся?
               </Button>
             </div>
@@ -120,14 +120,14 @@ const Host = () => {
       </section>
 
       {/* Stats */}
-      <section className="py-16 md:py-24 px-6">
+      <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
           <StatsCounter stats={stats} />
         </div>
       </section>
 
       {/* Gallery */}
-      <section className="py-20 md:py-32 px-6">
+      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
           <SectionHeading title="Галерея мероприятий" subtitle="Свадьбы, корпоративы, частные ужины и дни рождения" />
           <EventGallery images={galleryImages} accent="emerald" />
@@ -135,24 +135,24 @@ const Host = () => {
       </section>
 
       {/* Storytelling - Hormones */}
-      <section className="py-20 md:py-32 px-6">
+      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
           <SectionHeading title="Пять гормонов вашего праздника" subtitle="На мероприятиях стараюсь, чтобы гости почувствовали выброс этих пяти гормонов — и напрочь забыли про кортизол." />
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {hormones.map((h, i) => {
               const Icon = h.icon;
               return (
                 <ScrollReveal key={h.name} delay={i * 0.05} direction={i % 2 === 0 ? "left" : "right"}>
                   <motion.div
                     whileHover={{ scale: 1.01, x: i % 2 === 0 ? 8 : -8 }}
-                    className="flex items-start gap-6 p-6 md:p-8 rounded-2xl bg-card/40 border border-border hover:border-primary/30 transition-colors group interactive"
+                    className="flex items-start gap-4 sm:gap-6 p-5 sm:p-6 md:p-8 rounded-2xl bg-card/40 border border-border hover:border-primary/30 transition-colors group interactive"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                      <Icon className={`w-6 h-6 ${h.color}`} />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-muted/50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                      <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${h.color}`} />
                     </div>
                     <div>
-                      <h3 className="font-display text-xl md:text-2xl font-semibold mb-1">{h.name}</h3>
-                      <p className="font-body text-muted-foreground text-sm md:text-base leading-relaxed">{h.desc}</p>
+                      <h3 className="font-display text-lg sm:text-xl md:text-2xl font-semibold mb-1">{h.name}</h3>
+                      <p className="font-body text-muted-foreground text-xs sm:text-sm md:text-base leading-relaxed">{h.desc}</p>
                     </div>
                   </motion.div>
                 </ScrollReveal>
@@ -163,20 +163,20 @@ const Host = () => {
       </section>
 
       {/* Features */}
-      <section className="py-20 md:py-32 px-6 bg-gradient-dark">
+      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6 bg-gradient-dark">
         <div className="max-w-5xl mx-auto">
           <SectionHeading title="Почему выбирают меня" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((f, i) => {
               const Icon = f.icon;
               return (
                 <ScrollReveal key={i} delay={i * 0.05}>
                   <motion.div
                     whileHover={{ y: -4, scale: 1.02 }}
-                    className="p-6 rounded-xl bg-card/50 border border-border hover:border-primary/30 transition-all group interactive hover:shadow-emerald"
+                    className="p-5 sm:p-6 rounded-xl bg-card/50 border border-border hover:border-primary/30 transition-all group interactive hover:shadow-emerald"
                   >
-                    <Icon className="w-6 h-6 text-primary mb-3 group-hover:scale-110 group-hover:rotate-12 transition-transform" />
-                    <p className="font-body text-sm text-foreground/90 leading-relaxed">{f.text}</p>
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary mb-3 group-hover:scale-110 group-hover:rotate-12 transition-transform" />
+                    <p className="font-body text-xs sm:text-sm text-foreground/90 leading-relaxed">{f.text}</p>
                   </motion.div>
                 </ScrollReveal>
               );
@@ -192,15 +192,15 @@ const Host = () => {
       <FAQSection items={faqItems} accent="emerald" />
 
       {/* CTA */}
-      <section className="py-20 md:py-32 px-6 relative overflow-hidden">
+      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <img src="/images/event-wedding-1.jpg" alt="" className="w-full h-full object-cover blur-2xl" />
         </div>
         <ScrollReveal>
           <div className="max-w-2xl mx-auto text-center relative z-10">
-            <h2 className="font-display text-3xl md:text-5xl font-bold text-gradient-emerald mb-4">Обсудим ваш праздник?</h2>
-            <p className="font-body text-muted-foreground mb-8">Расскажите о вашем мероприятии, и мы создадим для вас что-то особенное.</p>
-            <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-emerald hover:opacity-90 text-primary-foreground text-base px-10 interactive">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold text-gradient-emerald mb-4">Обсудим ваш праздник?</h2>
+            <p className="font-body text-muted-foreground text-sm sm:text-base mb-6 sm:mb-8">Расскажите о вашем мероприятии, и мы создадим для вас что-то особенное.</p>
+            <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-emerald hover:opacity-90 text-primary-foreground text-sm sm:text-base px-8 sm:px-10 interactive">
               Рассчитать стоимость
             </Button>
           </div>

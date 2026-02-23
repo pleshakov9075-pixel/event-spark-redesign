@@ -34,7 +34,7 @@ const AnimatedNumber = ({ value, suffix }: { value: number; suffix: string }) =>
   }, [isInView, value]);
 
   return (
-    <span ref={ref} className="font-display text-4xl md:text-6xl font-bold text-gradient-emerald">
+    <span ref={ref} className="font-display text-3xl sm:text-4xl md:text-6xl font-bold text-gradient-emerald">
       {count}{suffix}
     </span>
   );
@@ -42,7 +42,7 @@ const AnimatedNumber = ({ value, suffix }: { value: number; suffix: string }) =>
 
 const StatsCounter = ({ stats }: StatsCounterProps) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
       {stats.map((stat, i) => (
         <motion.div
           key={stat.label}
@@ -53,7 +53,7 @@ const StatsCounter = ({ stats }: StatsCounterProps) => {
           className="text-center"
         >
           <AnimatedNumber value={stat.value} suffix={stat.suffix} />
-          <p className="font-body text-muted-foreground text-sm mt-2">{stat.label}</p>
+          <p className="font-body text-muted-foreground text-xs sm:text-sm mt-1 sm:mt-2">{stat.label}</p>
         </motion.div>
       ))}
     </div>

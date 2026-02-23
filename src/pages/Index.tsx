@@ -50,32 +50,32 @@ const Index = () => {
   return (
     <main className="min-h-screen bg-gradient-dark">
       {/* Hero */}
-      <section ref={heroRef} className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
+      <section ref={heroRef} className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 relative overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
           <img src="/images/hero-luxury-bg.jpg" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-background/40" />
+          <div className="absolute inset-0 bg-background/50" />
         </div>
 
         <motion.div
           style={{ opacity: heroOpacity }}
-          className="relative z-10 text-center"
+          className="relative z-10 text-center w-full"
         >
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-16"
+            className="mb-10 sm:mb-16"
           >
             <motion.p
               initial={{ opacity: 0, letterSpacing: "0.5em" }}
               animate={{ opacity: 1, letterSpacing: "0.3em" }}
               transition={{ delay: 0.2, duration: 1 }}
-              className="font-body text-primary text-xs md:text-sm uppercase mb-6 tracking-[0.3em]"
+              className="font-body text-primary text-[10px] sm:text-xs md:text-sm uppercase mb-4 sm:mb-6 tracking-[0.2em] sm:tracking-[0.3em]"
             >
               Ведущий мероприятий • Event-агентство
             </motion.p>
-            <h1 className="font-display text-5xl md:text-7xl lg:text-9xl font-bold mb-4">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-bold mb-3 sm:mb-4">
               <motion.span
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -97,14 +97,14 @@ const Index = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.6 }}
-              className="font-body text-muted-foreground text-lg md:text-xl max-w-xl mx-auto"
+              className="font-body text-foreground/70 text-base sm:text-lg md:text-xl max-w-xl mx-auto px-2"
             >
               Создаём события-произведения искусства для тех, кто ценит атмосферу, эстетику и смысл
             </motion.p>
           </motion.div>
 
-          {/* Cards with images */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-5xl w-full mx-auto">
+          {/* Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 max-w-5xl w-full mx-auto">
             {cards.map((card, i) => {
               const Icon = card.icon;
               return (
@@ -121,24 +121,24 @@ const Index = () => {
                       transition={{ type: "spring", stiffness: 400, damping: 20 }}
                       className={`relative rounded-2xl overflow-hidden ${card.border} ${card.shadow} ${card.hoverShadow} transition-shadow duration-500`}
                     >
-                      {/* Card image - fixed height */}
-                      <div className="relative h-[180px] md:h-[200px] overflow-hidden">
+                      {/* Card image */}
+                      <div className="relative h-[140px] sm:h-[180px] md:h-[200px] overflow-hidden">
                         <img src={card.image} alt={card.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-                        <Icon className="absolute top-5 left-6 w-7 h-7 text-primary drop-shadow-lg group-hover:scale-110 transition-transform" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-card via-background/40 to-transparent" />
+                        <Icon className="absolute top-4 left-4 sm:top-5 sm:left-6 w-6 h-6 sm:w-7 sm:h-7 text-primary drop-shadow-lg group-hover:scale-110 transition-transform" />
                       </div>
-                      {/* Card content - fixed height */}
-                      <div className="relative p-6 md:p-8 flex flex-col h-[180px] md:h-[180px] bg-card">
-                        <h2 className="font-display text-2xl md:text-3xl font-bold mb-1 text-foreground group-hover:text-primary transition-colors">
+                      {/* Card content */}
+                      <div className="relative p-5 sm:p-6 md:p-8 flex flex-col bg-card min-h-[160px] sm:min-h-[180px]">
+                        <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold mb-1 text-foreground group-hover:text-primary transition-colors">
                           {card.title}
                         </h2>
-                        <p className="font-display text-sm md:text-base italic text-foreground/60 mb-3">
+                        <p className="font-display text-xs sm:text-sm md:text-base italic text-foreground/50 mb-2 sm:mb-3">
                           {card.tagline}
                         </p>
-                        <p className="font-body text-sm text-foreground/70 leading-relaxed flex-1">
+                        <p className="font-body text-xs sm:text-sm text-foreground/60 leading-relaxed flex-1">
                           {card.description}
                         </p>
-                        <div className="mt-4 flex items-center gap-2 text-primary font-body text-sm font-medium group-hover:gap-3 transition-all">
+                        <div className="mt-3 sm:mt-4 flex items-center gap-2 text-primary font-body text-sm font-medium group-hover:gap-3 transition-all">
                           Подробнее
                           <motion.span className="inline-block" animate={{ x: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>→</motion.span>
                         </div>
@@ -156,24 +156,24 @@ const Index = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+          className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-10"
         >
           <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.5 }} className="flex flex-col items-center gap-2">
-            <span className="font-body text-xs text-muted-foreground/50 uppercase tracking-widest">Листайте</span>
-            <ChevronDown className="w-5 h-5 text-muted-foreground/30" />
+            <span className="font-body text-[10px] sm:text-xs text-muted-foreground/50 uppercase tracking-widest">Листайте</span>
+            <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground/30" />
           </motion.div>
         </motion.div>
       </section>
 
       {/* Stats */}
-      <section className="py-20 md:py-28 px-6">
+      <section className="py-16 sm:py-20 md:py-28 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
           <StatsCounter stats={stats} />
         </div>
       </section>
 
       {/* Event Types */}
-      <section className="py-20 md:py-32 px-6">
+      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
           <SectionHeading title="Мероприятия" subtitle="Свадьбы, корпоративы, частные ужины и гала-вечера — каждое событие уникально" />
           <EventTypesSection accent="emerald" />
@@ -181,8 +181,8 @@ const Index = () => {
       </section>
 
       {/* Photo marquee */}
-      <section className="py-16 overflow-hidden">
-        <div className="flex gap-4 animate-[scroll_30s_linear_infinite]" style={{ width: "max-content" }}>
+      <section className="py-10 sm:py-16 overflow-hidden">
+        <div className="flex gap-3 sm:gap-4 animate-[scroll_30s_linear_infinite]" style={{ width: "max-content" }}>
           {[
             "/images/event-wedding-1.jpg",
             "/images/event-corporate-1.jpg",
@@ -193,7 +193,7 @@ const Index = () => {
             "/images/event-wedding-1.jpg",
             "/images/event-corporate-1.jpg",
           ].map((src, i) => (
-            <div key={i} className="w-72 md:w-96 aspect-[3/2] rounded-xl overflow-hidden border border-border shrink-0">
+            <div key={i} className="w-56 sm:w-72 md:w-96 aspect-[3/2] rounded-xl overflow-hidden border border-border shrink-0">
               <img src={src} alt="Мероприятие" loading="lazy" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
           ))}
@@ -201,10 +201,10 @@ const Index = () => {
       </section>
 
       {/* Philosophy */}
-      <section className="py-20 md:py-32 px-6">
+      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <ScrollReveal>
-            <p className="font-display text-2xl md:text-4xl font-light text-foreground/90 leading-relaxed">
+            <p className="font-display text-xl sm:text-2xl md:text-4xl font-light text-foreground/90 leading-relaxed">
               Мы не тиражируем — мы{" "}
               <span className="text-gradient-emerald font-semibold">создаём</span>.
               Каждое событие — уникальное произведение искусства, отражающее{" "}
