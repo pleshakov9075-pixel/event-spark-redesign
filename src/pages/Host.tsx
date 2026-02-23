@@ -87,7 +87,7 @@ const Host = () => {
       {/* Hero with parallax */}
       <section ref={heroRef} className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
         <motion.div className="absolute inset-0" style={{ y: heroY }}>
-          <img src="/images/host-stage.jpg" alt="Владимир Башмаков на сцене" className="w-full h-full object-cover scale-110" />
+          <img src="/images/host-hero.png" alt="Владимир Башмаков — ведущий" className="w-full h-full object-cover scale-110" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/40" />
         </motion.div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
