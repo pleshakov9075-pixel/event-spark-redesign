@@ -205,10 +205,11 @@ const Index = () => {
         <div className="max-w-3xl mx-auto text-center">
           <ScrollReveal>
             <p className="font-display text-xl sm:text-2xl md:text-4xl font-light text-foreground/90 leading-relaxed">
-              Мы не тиражируем — мы{" "}
-              <span className="text-gradient-emerald font-semibold">создаём</span>.
-              Каждое событие — уникальное произведение искусства, отражающее{" "}
-              <span className="italic">вашу историю</span>.
+              Мы не тиражируем — мы <span className="text-gradient-emerald font-semibold">создаём</span>.
+              <br />
+              Каждое событие — уникальное произведение искусства,
+              <br />
+              отражающее <span className="italic">вашу историю</span>.
             </p>
           </ScrollReveal>
         </div>
