@@ -135,7 +135,7 @@ const Index = () => {
                         <img src={card.image} alt={card.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         <div className="absolute inset-0 bg-background/70 group-hover:bg-background/60 transition-colors duration-500" />
                       </div>
-                      <div className="relative p-8 md:p-10">
+                      <div className="relative p-8 md:p-10 min-h-[280px] md:min-h-[300px] flex flex-col">
                         <Icon className="w-8 h-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
                         <h2 className="font-display text-2xl md:text-3xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors">
                           {card.title}
@@ -143,7 +143,7 @@ const Index = () => {
                         <p className="font-display text-sm md:text-base italic text-muted-foreground mb-3">
                           {card.tagline}
                         </p>
-                        <p className="font-body text-sm text-muted-foreground/80 leading-relaxed">
+                        <p className="font-body text-sm text-muted-foreground/80 leading-relaxed flex-1">
                           {card.description}
                         </p>
                         <div className="mt-6 flex items-center gap-2 text-primary font-body text-sm group-hover:gap-3 transition-all">
