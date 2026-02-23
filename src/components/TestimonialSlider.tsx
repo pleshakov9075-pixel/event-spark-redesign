@@ -26,12 +26,12 @@ const TestimonialSlider = ({ testimonials, accent = "emerald" }: TestimonialSlid
   const shadowClass = accent === "emerald" ? "shadow-emerald" : "shadow-wine";
 
   return (
-    <section className="py-20 md:py-32 px-6 md:px-12 bg-gradient-dark">
+    <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6 md:px-12 bg-gradient-dark">
       <div className="max-w-4xl mx-auto">
         <SectionHeading title="Отзывы" accent={accent} />
         <ScrollReveal>
-          <div className={`relative rounded-2xl p-8 md:p-12 bg-card/60 ${borderClass} ${shadowClass}`}>
-            <Quote className="text-primary/20 w-12 h-12 mb-4" />
+          <div className={`relative rounded-2xl p-6 sm:p-8 md:p-12 bg-card/60 ${borderClass} ${shadowClass}`}>
+            <Quote className="text-primary/20 w-8 h-8 sm:w-12 sm:h-12 mb-3 sm:mb-4" />
             <AnimatePresence mode="wait">
               <motion.div
                 key={current}
@@ -40,34 +40,34 @@ const TestimonialSlider = ({ testimonials, accent = "emerald" }: TestimonialSlid
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.4 }}
               >
-                <p className="font-body text-foreground/90 text-base md:text-lg leading-relaxed mb-6 italic">
+                <p className="font-body text-foreground/90 text-sm sm:text-base md:text-lg leading-relaxed mb-4 sm:mb-6 italic">
                   «{t.text}»
                 </p>
                 <div>
-                  <p className="font-display text-lg text-foreground">{t.name}</p>
+                  <p className="font-display text-base sm:text-lg text-foreground">{t.name}</p>
                   {t.event && (
-                    <p className="font-body text-sm text-muted-foreground">{t.event}</p>
+                    <p className="font-body text-xs sm:text-sm text-muted-foreground">{t.event}</p>
                   )}
                 </div>
               </motion.div>
             </AnimatePresence>
-            <div className="flex gap-3 mt-8 justify-center">
+            <div className="flex gap-3 mt-6 sm:mt-8 justify-center">
               <button
                 onClick={prev}
-                className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors interactive"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors interactive"
                 aria-label="Предыдущий отзыв"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
               <button
                 onClick={next}
-                className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors interactive"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors interactive"
                 aria-label="Следующий отзыв"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
-            <div className="flex gap-1.5 justify-center mt-4">
+            <div className="flex gap-1.5 justify-center mt-3 sm:mt-4">
               {testimonials.map((_, i) => (
                 <button
                   key={i}

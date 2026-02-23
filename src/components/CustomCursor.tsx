@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const CustomCursor = () => {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
+    if (isMobile) return;
+
     const move = (e: MouseEvent) => {
       setPos({ x: e.clientX, y: e.clientY });
       setIsVisible(true);
@@ -33,25 +37,22 @@ const CustomCursor = () => {
       window.removeEventListener("mouseout", handleOut);
       document.removeEventListener("mouseleave", handleLeave);
     };
-  }, []);
+  }, [isMobile]);
 
-  // Hide on mobile
-  if (typeof window !== "undefined" && window.innerWidth < 768) return null;
+  if (isMobile) return null;
 
   return (
     <>
-      {/* Flashlight */}
       <div
-        className="flashlight hidden md:block"
+        className="flashlight"
         style={{
           left: pos.x,
           top: pos.y,
           opacity: isVisible ? 1 : 0,
         }}
       />
-      {/* Dot */}
       <motion.div
-        className="fixed pointer-events-none z-[9999] hidden md:block"
+        className="fixed pointer-events-none z-[9999]"
         animate={{
           x: pos.x - (isHovering ? 20 : 6),
           y: pos.y - (isHovering ? 20 : 6),

@@ -95,18 +95,18 @@ const Agency = () => {
     <main className="min-h-screen bg-gradient-dark">
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-40 glass border-b border-border/50">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors interactive font-body text-sm">
-            <ArrowLeft className="w-4 h-4" /> Главная
+            <ArrowLeft className="w-4 h-4" /> <span className="hidden sm:inline">Главная</span>
           </Link>
-          <Button onClick={() => setCalcOpen(true)} size="sm" className="bg-gradient-wine hover:opacity-90 text-secondary-foreground interactive">
+          <Button onClick={() => setCalcOpen(true)} size="sm" className="bg-gradient-wine hover:opacity-90 text-secondary-foreground interactive text-xs sm:text-sm">
             Рассчитать стоимость
           </Button>
         </div>
       </nav>
 
       {/* Hero */}
-      <section ref={heroRef} className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
+      <section ref={heroRef} className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-16 sm:pt-20 relative overflow-hidden">
         <motion.div className="absolute inset-0" style={{ y: heroY }}>
           <img src="/images/agency-hero.jpg" alt="Команда Art-Box Agency" className="w-full h-full object-cover scale-110" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/75 to-background/50" />
@@ -117,22 +117,22 @@ const Agency = () => {
               initial={{ opacity: 0, letterSpacing: "0.5em" }}
               animate={{ opacity: 1, letterSpacing: "0.3em" }}
               transition={{ delay: 0.2, duration: 1 }}
-              className="font-body text-wine-foreground text-sm md:text-base tracking-widest uppercase mb-4"
+              className="font-body text-wine-foreground text-xs sm:text-sm md:text-base tracking-widest uppercase mb-3 sm:mb-4"
             >
               Event Agency
             </motion.p>
-            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6">
               Art-Box<br />
               <span className="text-gradient-gold">творческая лаборатория</span>
             </h1>
-            <p className="font-body text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="font-body text-foreground/70 text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2">
               Создаём мероприятия, которые остаются внутри. Не тиражируем, не повторяемся — каждое событие является авторской постановкой.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-wine hover:opacity-90 text-secondary-foreground text-base px-8 interactive">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-wine hover:opacity-90 text-secondary-foreground text-sm sm:text-base px-6 sm:px-8 interactive">
                 Рассчитать стоимость
               </Button>
-              <Button variant="outline" size="lg" className="border-wine/30 text-wine-foreground hover:bg-wine/10 text-base px-8 interactive">
+              <Button variant="outline" size="lg" className="border-wine/30 text-wine-foreground hover:bg-wine/10 text-sm sm:text-base px-6 sm:px-8 interactive">
                 Обсудить проект
               </Button>
             </div>
@@ -141,10 +141,10 @@ const Agency = () => {
       </section>
 
       {/* Philosophy */}
-      <section className="py-20 md:py-32 px-6">
+      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <ScrollReveal>
-            <p className="font-display text-2xl md:text-4xl font-light text-foreground/90 leading-relaxed">
+            <p className="font-display text-xl sm:text-2xl md:text-4xl font-light text-foreground/90 leading-relaxed">
               ART BOX — это не просто event-агентство. Это{" "}
               <span className="text-gradient-gold font-semibold">творческая лаборатория</span>,
               где каждое событие рождается как живая история: с настроением, эмоциями и тонкой атмосферой.
@@ -154,7 +154,7 @@ const Agency = () => {
       </section>
 
       {/* Gallery */}
-      <section className="py-20 md:py-32 px-6">
+      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
           <SectionHeading title="Наши проекты" subtitle="Каждое мероприятие — авторская работа" accent="wine" />
           <EventGallery images={galleryImages} accent="wine" />
@@ -162,10 +162,10 @@ const Agency = () => {
       </section>
 
       {/* What you get */}
-      <section className="py-20 md:py-32 px-6">
+      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
           <SectionHeading title="Что будет в вашем празднике?" accent="wine" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {[
               { title: "Идея, а не шаблон", desc: "Событие, собранное вокруг вашей уникальности, а не по шаблону из Pinterest." },
               { title: "Атмосфера", desc: "Которую хочется пережить снова. Не просто тайминг. Мы проектируем эмоции и состояния." },
@@ -175,10 +175,10 @@ const Agency = () => {
               <ScrollReveal key={i} delay={i * 0.05}>
                 <motion.div
                   whileHover={{ y: -4, scale: 1.01 }}
-                  className="p-6 rounded-xl bg-card/50 border border-border hover:border-wine/30 transition-all interactive"
+                  className="p-5 sm:p-6 rounded-xl bg-card/50 border border-border hover:border-wine/30 transition-all interactive"
                 >
-                  <h3 className="font-display text-xl font-semibold mb-2">{item.title}</h3>
-                  <p className="font-body text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                  <h3 className="font-display text-lg sm:text-xl font-semibold mb-2">{item.title}</h3>
+                  <p className="font-body text-xs sm:text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
                 </motion.div>
               </ScrollReveal>
             ))}
@@ -187,41 +187,41 @@ const Agency = () => {
       </section>
 
       {/* Packages */}
-      <section className="py-20 md:py-32 px-6 bg-gradient-dark">
+      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6 bg-gradient-dark">
         <div className="max-w-5xl mx-auto">
           <SectionHeading title="Пакеты услуг" subtitle="Выберите уровень сопровождения для вашего события" accent="wine" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {packages.map((pkg, i) => {
               const Icon = pkg.icon;
               return (
                 <ScrollReveal key={pkg.name} delay={i * 0.1}>
                   <motion.div
                     whileHover={{ y: -8, scale: 1.02 }}
-                    className={`rounded-2xl p-8 border transition-all interactive ${
+                    className={`rounded-2xl p-6 sm:p-8 border transition-all interactive h-full flex flex-col ${
                       pkg.highlighted
                         ? "border-wine/50 bg-wine/5 shadow-wine"
                         : "border-border bg-card/50 hover:border-wine/30"
                     }`}
                   >
                     {pkg.highlighted && (
-                      <span className="font-body text-xs uppercase tracking-widest text-wine-foreground bg-wine/20 px-3 py-1 rounded-full mb-4 inline-block">
+                      <span className="font-body text-xs uppercase tracking-widest text-wine-foreground bg-wine/20 px-3 py-1 rounded-full mb-4 inline-block self-start">
                         Популярный
                       </span>
                     )}
-                    <Icon className={`w-8 h-8 mb-4 ${pkg.highlighted ? "text-gold" : "text-muted-foreground"}`} />
-                    <h3 className="font-display text-2xl font-bold mb-4">{pkg.name}</h3>
-                    <ul className="space-y-3">
+                    <Icon className={`w-7 h-7 sm:w-8 sm:h-8 mb-3 sm:mb-4 ${pkg.highlighted ? "text-gold" : "text-muted-foreground"}`} />
+                    <h3 className="font-display text-xl sm:text-2xl font-bold mb-3 sm:mb-4">{pkg.name}</h3>
+                    <ul className="space-y-2 sm:space-y-3 flex-1">
                       {pkg.features.map((f) => (
-                        <li key={f} className="flex items-start gap-2 font-body text-sm text-muted-foreground">
-                          <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                        <li key={f} className="flex items-start gap-2 font-body text-xs sm:text-sm text-muted-foreground">
+                          <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary shrink-0 mt-0.5" />
                           {f}
                         </li>
                       ))}
                     </ul>
-                    <p className="font-body text-xs text-muted-foreground/70 mt-4 italic">Идеально для: {pkg.ideal}</p>
+                    <p className="font-body text-[10px] sm:text-xs text-muted-foreground/70 mt-3 sm:mt-4 italic">Идеально для: {pkg.ideal}</p>
                     <Button
                       onClick={() => setCalcOpen(true)}
-                      className={`w-full mt-6 interactive ${
+                      className={`w-full mt-4 sm:mt-6 interactive ${
                         pkg.highlighted
                           ? "bg-gradient-wine hover:opacity-90 text-secondary-foreground"
                           : "bg-muted hover:bg-muted/80 text-foreground"
@@ -244,15 +244,15 @@ const Agency = () => {
       <FAQSection items={faqItems} accent="wine" />
 
       {/* CTA */}
-      <section className="py-20 md:py-32 px-6 relative overflow-hidden">
+      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <img src="/images/event-gala.jpg" alt="" className="w-full h-full object-cover blur-2xl" />
         </div>
         <ScrollReveal>
           <div className="max-w-2xl mx-auto text-center relative z-10">
-            <h2 className="font-display text-3xl md:text-5xl font-bold text-gradient-gold mb-4">Начнём создавать?</h2>
-            <p className="font-body text-muted-foreground mb-8">Расскажите о вашей идее, и мы превратим её в незабываемое событие.</p>
-            <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-wine hover:opacity-90 text-secondary-foreground text-base px-10 interactive">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold text-gradient-gold mb-4">Начнём создавать?</h2>
+            <p className="font-body text-muted-foreground text-sm sm:text-base mb-6 sm:mb-8">Расскажите о вашей идее, и мы превратим её в незабываемое событие.</p>
+            <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-wine hover:opacity-90 text-secondary-foreground text-sm sm:text-base px-8 sm:px-10 interactive">
               Обсудить проект
             </Button>
           </div>
