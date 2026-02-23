@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Mic, Heart, Zap, Smile, Star, Users, Music, Palette, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,10 @@ import SectionHeading from "@/components/SectionHeading";
 import TestimonialSlider from "@/components/TestimonialSlider";
 import FAQSection from "@/components/FAQSection";
 import Calculator from "@/components/Calculator";
+import EventGallery from "@/components/EventGallery";
+import StatsCounter from "@/components/StatsCounter";
 import Footer from "@/components/Footer";
+import { useRef } from "react";
 
 const hormones = [
   { name: "Серотонин", desc: "Хорошее настроение. Тёплая атмосфера, в которой каждый гость чувствует себя значимым.", icon: Smile, color: "text-yellow-400" },
@@ -42,8 +45,30 @@ const faqItems = [
   { q: "Молодёжь и старшее поколение — как сделать интересно всем?", a: "Подбираю интерактивы и программу так, чтобы комфортно чувствовали себя люди любых возрастов. Программа будет интересна и понятна как старшему поколению, так и молодёжи." },
 ];
 
+const galleryImages = [
+  { src: "/images/host-portrait.png", alt: "Владимир Башмаков — портрет", category: "Портрет" },
+  { src: "/images/host-event.png", alt: "На мероприятии", category: "Свадьбы" },
+  { src: "/images/host-guests.jpg", alt: "С гостями", category: "Свадьбы" },
+  { src: "/images/event-wedding-1.jpg", alt: "Свадебный банкет", category: "Свадьбы" },
+  { src: "/images/event-wedding-2.jpg", alt: "Выездная церемония", category: "Свадьбы" },
+  { src: "/images/event-corporate-1.jpg", alt: "Корпоративное мероприятие", category: "Корпоративы" },
+  { src: "/images/event-birthday.jpg", alt: "День рождения", category: "Дни рождения" },
+  { src: "/images/event-dinner.jpg", alt: "Камерный ужин", category: "Частные ужины" },
+  { src: "/images/event-gala.jpg", alt: "Гала-вечер", category: "Корпоративы" },
+];
+
+const stats = [
+  { value: 15, suffix: "+", label: "Лет с микрофоном" },
+  { value: 500, suffix: "+", label: "Мероприятий" },
+  { value: 30, suffix: "+", label: "Городов" },
+  { value: 98, suffix: "%", label: "Рекомендуют" },
+];
+
 const Host = () => {
   const [calcOpen, setCalcOpen] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
 
   return (
     <main className="min-h-screen bg-gradient-dark">
@@ -59,15 +84,22 @@ const Host = () => {
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img src="/images/host-stage.jpg" alt="Владимир Башмаков на сцене" className="w-full h-full object-cover" />
+      {/* Hero with parallax */}
+      <section ref={heroRef} className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
+        <motion.div className="absolute inset-0" style={{ y: heroY }}>
+          <img src="/images/host-stage.jpg" alt="Владимир Башмаков на сцене" className="w-full h-full object-cover scale-110" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/40" />
-        </div>
+        </motion.div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <p className="font-body text-primary text-sm md:text-base tracking-widest uppercase mb-4">Ведущий мероприятий</p>
+            <motion.p
+              initial={{ opacity: 0, letterSpacing: "0.5em" }}
+              animate={{ opacity: 1, letterSpacing: "0.3em" }}
+              transition={{ delay: 0.2, duration: 1 }}
+              className="font-body text-primary text-sm md:text-base tracking-widest uppercase mb-4"
+            >
+              Ведущий мероприятий
+            </motion.p>
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
               Амбассадор <br />
               <span className="text-gradient-emerald">ярких событий</span>
@@ -87,22 +119,18 @@ const Host = () => {
         </div>
       </section>
 
-      {/* Photo Gallery Strip */}
-      <section className="py-16 px-6 overflow-hidden">
+      {/* Stats */}
+      <section className="py-16 md:py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <StatsCounter stats={stats} />
+        </div>
+      </section>
+
+      {/* Gallery */}
+      <section className="py-20 md:py-32 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { src: "/images/host-portrait.png", alt: "Владимир Башмаков — портрет" },
-              { src: "/images/host-event.png", alt: "Владимир Башмаков на мероприятии" },
-              { src: "/images/host-guests.jpg", alt: "Владимир Башмаков с гостями" },
-            ].map((img, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
-                <div className="aspect-[4/3] rounded-2xl overflow-hidden border border-border">
-                  <img src={img.src} alt={img.alt} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
+          <SectionHeading title="Галерея мероприятий" subtitle="Свадьбы, корпоративы, частные ужины и дни рождения" />
+          <EventGallery images={galleryImages} accent="emerald" />
         </div>
       </section>
 
@@ -115,15 +143,18 @@ const Host = () => {
               const Icon = h.icon;
               return (
                 <ScrollReveal key={h.name} delay={i * 0.05} direction={i % 2 === 0 ? "left" : "right"}>
-                  <div className="flex items-start gap-6 p-6 md:p-8 rounded-2xl bg-card/40 border border-border hover:border-primary/30 transition-colors group">
-                    <div className={`w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
+                  <motion.div
+                    whileHover={{ scale: 1.01, x: i % 2 === 0 ? 8 : -8 }}
+                    className="flex items-start gap-6 p-6 md:p-8 rounded-2xl bg-card/40 border border-border hover:border-primary/30 transition-colors group interactive"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                       <Icon className={`w-6 h-6 ${h.color}`} />
                     </div>
                     <div>
                       <h3 className="font-display text-xl md:text-2xl font-semibold mb-1">{h.name}</h3>
                       <p className="font-body text-muted-foreground text-sm md:text-base leading-relaxed">{h.desc}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 </ScrollReveal>
               );
             })}
@@ -140,10 +171,13 @@ const Host = () => {
               const Icon = f.icon;
               return (
                 <ScrollReveal key={i} delay={i * 0.05}>
-                  <div className="p-6 rounded-xl bg-card/50 border border-border hover:border-primary/30 transition-all group interactive hover:shadow-emerald">
-                    <Icon className="w-6 h-6 text-primary mb-3 group-hover:scale-110 transition-transform" />
+                  <motion.div
+                    whileHover={{ y: -4, scale: 1.02 }}
+                    className="p-6 rounded-xl bg-card/50 border border-border hover:border-primary/30 transition-all group interactive hover:shadow-emerald"
+                  >
+                    <Icon className="w-6 h-6 text-primary mb-3 group-hover:scale-110 group-hover:rotate-12 transition-transform" />
                     <p className="font-body text-sm text-foreground/90 leading-relaxed">{f.text}</p>
-                  </div>
+                  </motion.div>
                 </ScrollReveal>
               );
             })}
@@ -158,9 +192,12 @@ const Host = () => {
       <FAQSection items={faqItems} accent="emerald" />
 
       {/* CTA */}
-      <section className="py-20 md:py-32 px-6">
+      <section className="py-20 md:py-32 px-6 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <img src="/images/event-wedding-1.jpg" alt="" className="w-full h-full object-cover blur-2xl" />
+        </div>
         <ScrollReveal>
-          <div className="max-w-2xl mx-auto text-center">
+          <div className="max-w-2xl mx-auto text-center relative z-10">
             <h2 className="font-display text-3xl md:text-5xl font-bold text-gradient-emerald mb-4">Обсудим ваш праздник?</h2>
             <p className="font-body text-muted-foreground mb-8">Расскажите о вашем мероприятии, и мы создадим для вас что-то особенное.</p>
             <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-emerald hover:opacity-90 text-primary-foreground text-base px-10 interactive">

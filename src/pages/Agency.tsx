@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Gem, Crown, Sparkles, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,9 @@ import SectionHeading from "@/components/SectionHeading";
 import TestimonialSlider from "@/components/TestimonialSlider";
 import FAQSection from "@/components/FAQSection";
 import Calculator from "@/components/Calculator";
+import EventGallery from "@/components/EventGallery";
 import Footer from "@/components/Footer";
+import { useRef } from "react";
 
 const packages = [
   {
@@ -72,8 +74,22 @@ const faqItems = [
   { q: "Можно ли работать по договору?", a: "Обязательно. Мы оформляем договор, согласовываем смету, ведём документацию и работаем официально — особенно для корпоративных клиентов." },
 ];
 
+const galleryImages = [
+  { src: "/images/agency-work.jpg", alt: "Art-Box за работой", category: "Команда" },
+  { src: "/images/event-wedding-1.jpg", alt: "Свадебный банкет", category: "Свадьбы" },
+  { src: "/images/event-wedding-2.jpg", alt: "Выездная церемония", category: "Свадьбы" },
+  { src: "/images/event-corporate-1.jpg", alt: "Корпоратив на сцене", category: "Корпоративы" },
+  { src: "/images/event-gala.jpg", alt: "Гала-вечер", category: "Корпоративы" },
+  { src: "/images/event-birthday.jpg", alt: "День рождения", category: "Дни рождения" },
+  { src: "/images/event-dinner.jpg", alt: "Камерный ужин", category: "Частные ужины" },
+  { src: "/images/host-stage.jpg", alt: "На сцене", category: "Команда" },
+];
+
 const Agency = () => {
   const [calcOpen, setCalcOpen] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
 
   return (
     <main className="min-h-screen bg-gradient-dark">
@@ -90,17 +106,23 @@ const Agency = () => {
       </nav>
 
       {/* Hero */}
-      <section className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img src="/images/agency-work.jpg" alt="Art-Box Agency за работой" className="w-full h-full object-cover" />
+      <section ref={heroRef} className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
+        <motion.div className="absolute inset-0" style={{ y: heroY }}>
+          <img src="/images/agency-work.jpg" alt="Art-Box Agency за работой" className="w-full h-full object-cover scale-110" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/75 to-background/50" />
-        </div>
+        </motion.div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <p className="font-body text-wine-foreground text-sm md:text-base tracking-widest uppercase mb-4">Event Agency</p>
+            <motion.p
+              initial={{ opacity: 0, letterSpacing: "0.5em" }}
+              animate={{ opacity: 1, letterSpacing: "0.3em" }}
+              transition={{ delay: 0.2, duration: 1 }}
+              className="font-body text-wine-foreground text-sm md:text-base tracking-widest uppercase mb-4"
+            >
+              Event Agency
+            </motion.p>
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
-              Art-Box
-              <br />
+              Art-Box<br />
               <span className="text-gradient-gold">творческая лаборатория</span>
             </h1>
             <p className="font-body text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -131,6 +153,14 @@ const Agency = () => {
         </div>
       </section>
 
+      {/* Gallery */}
+      <section className="py-20 md:py-32 px-6">
+        <div className="max-w-6xl mx-auto">
+          <SectionHeading title="Наши проекты" subtitle="Каждое мероприятие — авторская работа" accent="wine" />
+          <EventGallery images={galleryImages} accent="wine" />
+        </div>
+      </section>
+
       {/* What you get */}
       <section className="py-20 md:py-32 px-6">
         <div className="max-w-5xl mx-auto">
@@ -143,10 +173,13 @@ const Agency = () => {
               { title: "Премиум-сервис", desc: "ART BOX — это не шоу ради шоу. Это работа на ваше имя и вашу репутацию." },
             ].map((item, i) => (
               <ScrollReveal key={i} delay={i * 0.05}>
-                <div className="p-6 rounded-xl bg-card/50 border border-border hover:border-wine/30 transition-all">
+                <motion.div
+                  whileHover={{ y: -4, scale: 1.01 }}
+                  className="p-6 rounded-xl bg-card/50 border border-border hover:border-wine/30 transition-all interactive"
+                >
                   <h3 className="font-display text-xl font-semibold mb-2">{item.title}</h3>
                   <p className="font-body text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-                </div>
+                </motion.div>
               </ScrollReveal>
             ))}
           </div>
@@ -163,7 +196,7 @@ const Agency = () => {
               return (
                 <ScrollReveal key={pkg.name} delay={i * 0.1}>
                   <motion.div
-                    whileHover={{ y: -4 }}
+                    whileHover={{ y: -8, scale: 1.02 }}
                     className={`rounded-2xl p-8 border transition-all interactive ${
                       pkg.highlighted
                         ? "border-wine/50 bg-wine/5 shadow-wine"
@@ -211,9 +244,12 @@ const Agency = () => {
       <FAQSection items={faqItems} accent="wine" />
 
       {/* CTA */}
-      <section className="py-20 md:py-32 px-6">
+      <section className="py-20 md:py-32 px-6 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <img src="/images/event-gala.jpg" alt="" className="w-full h-full object-cover blur-2xl" />
+        </div>
         <ScrollReveal>
-          <div className="max-w-2xl mx-auto text-center">
+          <div className="max-w-2xl mx-auto text-center relative z-10">
             <h2 className="font-display text-3xl md:text-5xl font-bold text-gradient-gold mb-4">Начнём создавать?</h2>
             <p className="font-body text-muted-foreground mb-8">Расскажите о вашей идее, и мы превратим её в незабываемое событие.</p>
             <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-wine hover:opacity-90 text-secondary-foreground text-base px-10 interactive">
