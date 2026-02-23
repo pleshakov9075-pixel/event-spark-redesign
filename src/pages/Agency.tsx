@@ -63,8 +63,9 @@ const Agency = () => {
 
       {/* Hero */}
       <section className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-wine/15 rounded-full blur-[150px]" />
+        <div className="absolute inset-0">
+          <img src="/images/agency-work.jpg" alt="Art-Box Agency за работой" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/75 to-background/50" />
         </div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>

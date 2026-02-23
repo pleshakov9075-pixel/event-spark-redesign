@@ -59,8 +59,9 @@ const Host = () => {
 
       {/* Hero */}
       <section className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[150px]" />
+        <div className="absolute inset-0">
+          <img src="/images/host-stage.jpg" alt="Владимир Башмаков на сцене" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/40" />
         </div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
@@ -81,6 +82,25 @@ const Host = () => {
               </Button>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Photo Gallery Strip */}
+      <section className="py-16 px-6 overflow-hidden">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { src: "/images/host-portrait.png", alt: "Владимир Башмаков — портрет" },
+              { src: "/images/host-event.png", alt: "Владимир Башмаков на мероприятии" },
+              { src: "/images/host-guests.jpg", alt: "Владимир Башмаков с гостями" },
+            ].map((img, i) => (
+              <ScrollReveal key={i} delay={i * 0.1}>
+                <div className="aspect-[4/3] rounded-2xl overflow-hidden border border-border">
+                  <img src={img.src} alt={img.alt} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
         </div>
       </section>
 
