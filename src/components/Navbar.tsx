@@ -50,7 +50,8 @@ const Navbar = ({ cta, accent = "default" }: NavbarProps) => {
         {/* Logo / Home link */}
         <Link
           to="/"
-          className="font-display text-lg sm:text-xl font-bold text-foreground hover:text-primary transition-colors interactive"
+          className="text-xl sm:text-2xl text-foreground hover:text-primary transition-colors interactive italic"
+          style={{ fontFamily: "'Cormorant Garamond', serif" }}
         >
           V.B. & Art-Box
         </Link>
