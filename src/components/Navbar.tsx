@@ -47,12 +47,12 @@ const Navbar = ({ cta, accent = "default" }: NavbarProps) => {
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
-        {/* Logo */}
+        {/* Logo / Home link */}
         <Link
           to="/"
           className="font-display text-lg sm:text-xl font-bold text-foreground hover:text-primary transition-colors interactive"
         >
-          В. Башмаков
+          VB
         </Link>
 
         {/* Desktop nav */}
