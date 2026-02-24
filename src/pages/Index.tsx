@@ -125,7 +125,6 @@ const Index = () => {
                       <div className="relative h-[140px] sm:h-[180px] md:h-[200px] overflow-hidden">
                         <img src={card.image} alt={card.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         <div className="absolute inset-0 bg-gradient-to-t from-card via-card/60 to-transparent" />
-                        <Icon className="absolute top-4 left-4 sm:top-5 sm:left-6 w-6 h-6 sm:w-7 sm:h-7 text-primary drop-shadow-lg group-hover:scale-110 transition-transform" />
                       </div>
                       {/* Card content */}
                       <div className="relative p-5 sm:p-6 md:p-8 flex flex-col bg-card min-h-[160px] sm:min-h-[180px]">
@@ -138,9 +137,10 @@ const Index = () => {
                         <p className="font-body text-xs sm:text-sm text-foreground/60 leading-relaxed flex-1">
                           {card.description}
                         </p>
-                        <div className="mt-3 sm:mt-4 flex items-center gap-2 text-primary font-body text-sm font-medium group-hover:gap-3 transition-all">
-                          Подробнее
-                          <motion.span className="inline-block" animate={{ x: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>→</motion.span>
+                        <div className="mt-3 sm:mt-4">
+                          <span className="inline-block px-6 py-2.5 rounded-full border border-primary/30 bg-primary/5 text-primary font-body text-sm font-medium tracking-wide group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                            Подробнее
+                          </span>
                         </div>
                       </div>
                     </motion.div>
