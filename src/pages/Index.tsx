@@ -49,105 +49,103 @@ const Index = () => {
 
   return (
     <main className="min-h-screen bg-gradient-dark">
-      {/* Hero */}
-      <section ref={heroRef} className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 relative overflow-hidden">
-        {/* Background image */}
+      {/* Hero — fullscreen video */}
+      <section ref={heroRef} className="min-h-screen relative overflow-hidden flex items-end">
+        {/* Video background */}
         <div className="absolute inset-0">
-          <img src="/images/hero-luxury-bg.jpg" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-background/70" />
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+            poster="/images/hero-luxury-bg.jpg"
+          >
+            <source src="/videos/hero-bg.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-transparent" />
         </div>
 
         <motion.div
           style={{ opacity: heroOpacity }}
-          className="relative z-10 text-center w-full"
+          className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 pb-20 sm:pb-28 md:pb-36 pt-32"
         >
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-10 sm:mb-16"
-          >
-            <motion.p
-              initial={{ opacity: 0, letterSpacing: "0.5em" }}
-              animate={{ opacity: 1, letterSpacing: "0.3em" }}
-              transition={{ delay: 0.2, duration: 1 }}
-              className="font-body text-primary text-[10px] sm:text-xs md:text-sm uppercase mb-4 sm:mb-6 tracking-[0.2em] sm:tracking-[0.3em]"
-            >
-              Ведущий мероприятий • Event-агентство
-            </motion.p>
-            <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-bold mb-3 sm:mb-4">
-              <motion.span
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-gradient-emerald inline-block"
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-end">
+            {/* Left — name & tagline */}
+            <div>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+                className="font-body text-primary text-[10px] sm:text-xs uppercase tracking-[0.25em] mb-5 sm:mb-6"
               >
-                Владимир
-              </motion.span>{" "}
-              <motion.span
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="text-foreground inline-block"
-              >
-                Башмаков
-              </motion.span>
-            </h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
-              className="font-body text-foreground/70 text-base sm:text-lg md:text-xl max-w-xl mx-auto px-2"
-            >
-              Создаём события-произведения искусства для тех, кто ценит атмосферу, эстетику и смысл
-            </motion.p>
-          </motion.div>
+                Ведущий мероприятий • Event-агентство
+              </motion.p>
 
-          {/* Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 max-w-5xl w-full mx-auto">
-            {cards.map((card, i) => {
-              const Icon = card.icon;
-              return (
+              <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-[0.9] mb-6 sm:mb-8">
+                <motion.span
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3, duration: 0.8 }}
+                  className="text-gradient-gold block"
+                >
+                  Владимир
+                </motion.span>
+                <motion.span
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                  className="text-foreground block"
+                >
+                  Башмаков
+                </motion.span>
+              </h1>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8, duration: 0.6 }}
+                className="font-body text-foreground/60 text-sm sm:text-base md:text-lg max-w-md leading-relaxed"
+              >
+                Создаём события-произведения искусства для тех, кто ценит атмосферу, эстетику и смысл
+              </motion.p>
+            </div>
+
+            {/* Right — cards */}
+            <div className="flex flex-col gap-4 sm:gap-5">
+              {cards.map((card, i) => (
                 <motion.div
                   key={card.to}
-                  initial={{ opacity: 0, y: 40 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 1 + i * 0.15 }}
                 >
                   <Link to={card.to} className="block group interactive">
                     <motion.div
-                      whileHover={{ scale: 1.02, y: -6 }}
-                      whileTap={{ scale: 0.98 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                      className={`relative rounded-2xl overflow-hidden ${card.border} ${card.shadow} ${card.hoverShadow} transition-shadow duration-500`}
+                      whileHover={{ x: 8 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                      className="relative glass rounded-xl p-5 sm:p-6 flex items-center gap-5 border border-primary/10 hover:border-primary/30 transition-all duration-300"
                     >
-                      {/* Card image */}
-                      <div className="relative h-[140px] sm:h-[180px] md:h-[200px] overflow-hidden">
-                        <img src={card.image} alt={card.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/60 to-transparent" />
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden shrink-0">
+                        <img src={card.image} alt={card.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                       </div>
-                      {/* Card content */}
-                      <div className="relative p-5 sm:p-6 md:p-8 flex flex-col bg-card min-h-[160px] sm:min-h-[180px]">
-                        <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold mb-1 text-foreground group-hover:text-primary transition-colors">
+                      <div className="flex-1 min-w-0">
+                        <h2 className="font-display text-lg sm:text-xl font-bold text-foreground group-hover:text-primary transition-colors mb-0.5">
                           {card.title}
                         </h2>
-                        <p className="font-display text-xs sm:text-sm md:text-base italic text-foreground/50 mb-2 sm:mb-3">
+                        <p className="font-body text-xs sm:text-sm text-foreground/50 leading-relaxed line-clamp-2">
                           {card.tagline}
                         </p>
-                        <p className="font-body text-xs sm:text-sm text-foreground/60 leading-relaxed flex-1">
-                          {card.description}
-                        </p>
-                        <div className="mt-3 sm:mt-4">
-                          <span className="inline-block px-6 py-2.5 rounded-full border border-primary/30 bg-primary/5 text-primary font-body text-sm font-medium tracking-wide group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-                            Подробнее
-                          </span>
-                        </div>
                       </div>
+                      <span className="shrink-0 font-body text-xs text-primary/60 group-hover:text-primary transition-colors tracking-wide uppercase">
+                        →
+                      </span>
                     </motion.div>
                   </Link>
                 </motion.div>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </motion.div>
 
@@ -159,8 +157,8 @@ const Index = () => {
           className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-10"
         >
           <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.5 }} className="flex flex-col items-center gap-2">
-            <span className="font-body text-[10px] sm:text-xs text-muted-foreground/50 uppercase tracking-widest">Листайте</span>
-            <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground/30" />
+            <span className="font-body text-[10px] sm:text-xs text-primary-foreground/50 uppercase tracking-widest">Листайте</span>
+            <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground/30" />
           </motion.div>
         </motion.div>
       </section>
