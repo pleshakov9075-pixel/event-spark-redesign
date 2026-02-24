@@ -125,11 +125,11 @@ const Index = () => {
                     transition={{ type: "spring", stiffness: 400, damping: 20 }}
                     className={`relative rounded-2xl overflow-hidden glass-strong ${card.border} ${card.shadow} ${card.hoverShadow} transition-shadow duration-500`}
                   >
-                    <div className="relative h-[140px] sm:h-[180px] md:h-[200px] overflow-hidden">
+                    <div className="relative h-[50px] sm:h-[60px] md:h-[70px] overflow-hidden">
                       <img src={card.image} alt={card.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                       <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
                     </div>
-                    <div className="relative p-5 sm:p-6 md:p-8 flex flex-col min-h-[160px] sm:min-h-[180px]">
+                    <div className="relative p-4 sm:p-5 flex flex-col min-h-[100px] sm:min-h-[110px]">
                       <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold mb-1 text-foreground group-hover:text-primary transition-colors">
                         {card.title}
                       </h2>
