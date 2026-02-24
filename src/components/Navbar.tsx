@@ -52,7 +52,7 @@ const Navbar = ({ cta, accent = "default" }: NavbarProps) => {
           to="/"
           className="font-display text-lg sm:text-xl font-bold text-foreground hover:text-primary transition-colors interactive"
         >
-          VB
+          V.B. & Art-Box
         </Link>
 
         {/* Desktop nav */}
