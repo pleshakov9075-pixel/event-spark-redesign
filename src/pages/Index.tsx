@@ -54,7 +54,7 @@ const Index = () => {
         {/* Background image */}
         <div className="absolute inset-0">
           <img src="/images/hero-luxury-bg.jpg" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-background/50" />
+          <div className="absolute inset-0 bg-background/70" />
         </div>
 
         <motion.div
@@ -124,7 +124,7 @@ const Index = () => {
                       {/* Card image */}
                       <div className="relative h-[140px] sm:h-[180px] md:h-[200px] overflow-hidden">
                         <img src={card.image} alt={card.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-card via-background/40 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/60 to-transparent" />
                         <Icon className="absolute top-4 left-4 sm:top-5 sm:left-6 w-6 h-6 sm:w-7 sm:h-7 text-primary drop-shadow-lg group-hover:scale-110 transition-transform" />
                       </div>
                       {/* Card content */}

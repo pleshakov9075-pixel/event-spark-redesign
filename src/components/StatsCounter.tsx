@@ -34,7 +34,7 @@ const AnimatedNumber = ({ value, suffix }: { value: number; suffix: string }) =>
   }, [isInView, value]);
 
   return (
-    <span ref={ref} className="font-display text-3xl sm:text-4xl md:text-6xl font-bold text-gradient-emerald">
+    <span ref={ref} className="font-display text-3xl sm:text-4xl md:text-6xl font-bold text-gradient-gold">
       {count}{suffix}
     </span>
   );
