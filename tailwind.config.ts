@@ -15,7 +15,8 @@ export default {
     extend: {
       fontFamily: {
         display: ["Playfair Display", "serif"],
-        sans: ["Inter", "sans-serif"],
+        sans: ["Manrope", "sans-serif"],
+        body: ["Manrope", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -58,6 +59,16 @@ export default {
         gold: {
           DEFAULT: "hsl(var(--gold))",
           foreground: "hsl(var(--gold-foreground))",
+        },
+        host: {
+          DEFAULT: "hsl(var(--host))",
+          foreground: "hsl(var(--host-foreground))",
+          glow: "hsl(var(--host-glow))",
+        },
+        agency: {
+          DEFAULT: "hsl(var(--agency))",
+          foreground: "hsl(var(--agency-foreground))",
+          glow: "hsl(var(--agency-glow))",
         },
         emerald: {
           glow: "hsl(var(--emerald-glow))",

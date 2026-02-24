@@ -71,9 +71,9 @@ const Host = () => {
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
 
   return (
-    <main className="min-h-screen bg-gradient-dark">
+    <main className="min-h-screen bg-background">
       {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-40 glass border-b border-border/50">
+      <nav className="fixed top-0 left-0 right-0 z-40 glass-strong border-b border-border/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors interactive font-body text-sm">
             <ArrowLeft className="w-4 h-4" /> <span className="hidden sm:inline">Главная</span>
@@ -87,31 +87,34 @@ const Host = () => {
       {/* Hero with parallax */}
       <section ref={heroRef} className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-16 sm:pt-20 relative overflow-hidden">
         <motion.div className="absolute inset-0" style={{ y: heroY }}>
-          <img src="/images/host-hero.png" alt="Владимир Башмаков — ведущий" className="w-full h-full object-cover scale-110" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/50" />
+          <img src="/images/host-hero.png" alt="Владимир Башмаков — ведущий" className="w-full h-full object-cover scale-110" loading="lazy" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/75 to-background/40" />
+          <div className="absolute inset-0 bg-gradient-hero-host" />
         </motion.div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <motion.p
-              initial={{ opacity: 0, letterSpacing: "0.5em" }}
-              animate={{ opacity: 1, letterSpacing: "0.3em" }}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 1 }}
-              className="font-body text-primary text-xs sm:text-sm md:text-base tracking-widest uppercase mb-3 sm:mb-4"
+              className="flex items-center justify-center gap-3 mb-4 sm:mb-5"
             >
-              Ведущий мероприятий
-            </motion.p>
-            <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6">
+              <span className="h-px w-8 sm:w-10 bg-host/40" />
+              <span className="font-body text-host text-xs sm:text-sm tracking-[0.25em] uppercase font-medium">Ведущий мероприятий</span>
+              <span className="h-px w-8 sm:w-10 bg-host/40" />
+            </motion.div>
+            <h1 className="font-display font-bold mb-4 sm:mb-6">
               Амбассадор <br />
               <span className="text-gradient-emerald">ярких событий</span>
             </h1>
-            <p className="font-body text-foreground/70 text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2">
+            <p className="font-body text-foreground/60 text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2">
               15 лет с микрофоном. Комфортно, интеллигентно, весело, с душой, индивидуально и современно.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-emerald hover:opacity-90 text-primary-foreground text-sm sm:text-base px-6 sm:px-8 interactive">
                 Рассчитать стоимость
               </Button>
-              <Button variant="outline" size="lg" className="border-primary/30 text-primary hover:bg-primary/10 text-sm sm:text-base px-6 sm:px-8 interactive">
+              <Button variant="outline" size="lg" className="border-host/25 text-host hover:bg-host/10 text-sm sm:text-base px-6 sm:px-8 interactive">
                 Познакомимся?
               </Button>
             </div>
