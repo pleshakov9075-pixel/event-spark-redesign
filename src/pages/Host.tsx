@@ -14,11 +14,11 @@ import Footer from "@/components/Footer";
 import { useRef } from "react";
 
 const hormones = [
-  { name: "Серотонин", desc: "Хорошее настроение. Тёплая атмосфера, в которой каждый гость чувствует себя значимым.", icon: Smile, color: "text-yellow-400" },
-  { name: "Окситоцин", desc: "Расслабленность. Гости чувствуют себя комфортно и раскрепощённо.", icon: Heart, color: "text-pink-400" },
+  { name: "Серотонин", desc: "Хорошее настроение. Тёплая атмосфера, в которой каждый гость чувствует себя значимым.", icon: Smile, color: "text-primary" },
+  { name: "Окситоцин", desc: "Расслабленность. Гости чувствуют себя комфортно и раскрепощённо.", icon: Heart, color: "text-secondary" },
   { name: "Эндорфин", desc: "Трогательные моменты. Искренние эмоции, от которых наворачиваются слёзы радости.", icon: Star, color: "text-emerald-glow" },
-  { name: "Дофамин", desc: "Мурашки. Каждый следующий момент лучше предыдущего.", icon: Zap, color: "text-blue-400" },
-  { name: "Адреналин", desc: "Драйв и энергия. Моменты, от которых захватывает дух.", icon: Mic, color: "text-red-400" },
+  { name: "Дофамин", desc: "Мурашки. Каждый следующий момент лучше предыдущего.", icon: Zap, color: "text-accent" },
+  { name: "Адреналин", desc: "Драйв и энергия. Моменты, от которых захватывает дух.", icon: Mic, color: "text-secondary" },
 ];
 
 const features = [
@@ -88,7 +88,7 @@ const Host = () => {
       <section ref={heroRef} className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-16 sm:pt-20 relative overflow-hidden">
         <motion.div className="absolute inset-0" style={{ y: heroY }}>
           <img src="/images/host-hero.png" alt="Владимир Башмаков — ведущий" className="w-full h-full object-cover scale-110" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/50" />
         </motion.div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>

@@ -30,8 +30,8 @@ const TestimonialSlider = ({ testimonials, accent = "emerald" }: TestimonialSlid
       <div className="max-w-4xl mx-auto">
         <SectionHeading title="Отзывы" accent={accent} />
         <ScrollReveal>
-          <div className={`relative rounded-2xl p-6 sm:p-8 md:p-12 bg-card/60 ${borderClass} ${shadowClass}`}>
-            <Quote className="text-primary/20 w-8 h-8 sm:w-12 sm:h-12 mb-3 sm:mb-4" />
+          <div className={`relative rounded-2xl p-6 sm:p-8 md:p-12 bg-card ${borderClass} ${shadowClass}`}>
+            <Quote className="text-primary/30 w-8 h-8 sm:w-12 sm:h-12 mb-3 sm:mb-4" />
             <AnimatePresence mode="wait">
               <motion.div
                 key={current}
