@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Sparkles, Theater, ChevronDown } from "lucide-react";
 import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 import ScrollReveal from "@/components/ScrollReveal";
 import StatsCounter from "@/components/StatsCounter";
 import EventTypesSection from "@/components/EventTypesSection";
@@ -16,10 +17,9 @@ const cards = [
     description: "Персональный подход к каждому мероприятию. Создаю атмосферу, в которой гости чувствуют себя свободно.",
     icon: Sparkles,
     image: "/images/card-host-bg.jpg",
-    gradient: "bg-gradient-emerald",
     border: "border-gradient-emerald",
     shadow: "shadow-emerald",
-    hoverShadow: "hover:shadow-[0_0_60px_-10px_hsl(160_70%_35%/0.4)]",
+    hoverShadow: "hover:shadow-[0_8px_50px_-12px_hsl(36_75%_50%/0.35)]",
   },
   {
     to: "/agency",
@@ -28,10 +28,9 @@ const cards = [
     description: "Полное сопровождение мероприятий от концепции до финального аккорда. Каждое событие — авторская постановка.",
     icon: Theater,
     image: "/images/card-agency-bg.jpg",
-    gradient: "bg-gradient-wine",
     border: "border-gradient-wine",
     shadow: "shadow-wine",
-    hoverShadow: "hover:shadow-[0_0_60px_-10px_hsl(345_50%_35%/0.4)]",
+    hoverShadow: "hover:shadow-[0_8px_50px_-12px_hsl(335_55%_48%/0.35)]",
   },
 ];
 
@@ -49,35 +48,26 @@ const Index = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <Navbar />
+
       {/* Hero */}
       <section ref={heroRef} className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 relative overflow-hidden">
         {/* Video background */}
         <div className="absolute inset-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover"
-            poster="/images/hero-luxury-bg.jpg"
-          >
+          <video autoPlay muted loop playsInline className="w-full h-full object-cover" poster="/images/hero-luxury-bg.jpg">
             <source src="/videos/hero-bg.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-transparent to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/75 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/30 via-transparent to-background/30" />
         </div>
 
-        <motion.div
-          style={{ opacity: heroOpacity }}
-          className="relative z-10 text-center w-full max-w-6xl mx-auto"
-        >
+        <motion.div style={{ opacity: heroOpacity }} className="relative z-10 text-center w-full max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="mb-10 sm:mb-16"
           >
-            {/* Ornamental subtitle */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -135,12 +125,10 @@ const Index = () => {
                     transition={{ type: "spring", stiffness: 400, damping: 20 }}
                     className={`relative rounded-2xl overflow-hidden glass-strong ${card.border} ${card.shadow} ${card.hoverShadow} transition-shadow duration-500`}
                   >
-                    {/* Card image */}
                     <div className="relative h-[140px] sm:h-[180px] md:h-[200px] overflow-hidden">
                       <img src={card.image} alt={card.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                       <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
                     </div>
-                    {/* Card content */}
                     <div className="relative p-5 sm:p-6 md:p-8 flex flex-col min-h-[160px] sm:min-h-[180px]">
                       <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold mb-1 text-foreground group-hover:text-primary transition-colors">
                         {card.title}
@@ -179,14 +167,14 @@ const Index = () => {
       </section>
 
       {/* Stats */}
-      <section className="py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-gradient-dark">
+      <section className="py-20 sm:py-28 md:py-36 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
           <StatsCounter stats={stats} />
         </div>
       </section>
 
       {/* Event Types */}
-      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6">
+      <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-dark">
         <div className="max-w-6xl mx-auto">
           <SectionHeading title="Мероприятия" subtitle="Свадьбы, корпоративы, частные ужины и гала-вечера — каждое событие уникально" />
           <EventTypesSection accent="emerald" />
@@ -194,7 +182,7 @@ const Index = () => {
       </section>
 
       {/* Photo marquee */}
-      <section className="py-10 sm:py-16 overflow-hidden">
+      <section className="py-12 sm:py-20 overflow-hidden">
         <div className="flex gap-3 sm:gap-4 animate-[scroll_30s_linear_infinite]" style={{ width: "max-content" }}>
           {[
             "/images/event-wedding-1.jpg",
@@ -206,7 +194,7 @@ const Index = () => {
             "/images/event-wedding-1.jpg",
             "/images/event-corporate-1.jpg",
           ].map((src, i) => (
-            <div key={i} className="w-56 sm:w-72 md:w-96 aspect-[3/2] rounded-xl overflow-hidden border border-border shrink-0">
+            <div key={i} className="w-56 sm:w-72 md:w-96 aspect-[3/2] rounded-2xl overflow-hidden border border-border/50 shrink-0">
               <img src={src} alt="Мероприятие" loading="lazy" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
           ))}
@@ -214,16 +202,16 @@ const Index = () => {
       </section>
 
       {/* Philosophy */}
-      <section className="py-16 sm:py-20 md:py-32 px-4 sm:px-6">
+      <section className="py-20 sm:py-28 md:py-36 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <ScrollReveal>
-            <p className="font-display text-xl sm:text-2xl md:text-4xl font-light text-foreground/90 leading-relaxed">
+            <blockquote className="font-display text-xl sm:text-2xl md:text-4xl font-light text-foreground/90 leading-relaxed border-none pl-0 text-center">
               Мы не тиражируем — мы <span className="text-gradient-emerald font-semibold">создаём</span>.
-              <br />
-              Каждое событие — уникальное произведение искусства,
-              <br />
-              отражающее <span className="italic">вашу историю</span>.
-            </p>
+              <br className="hidden sm:block" />
+              {" "}Каждое событие — уникальное произведение искусства,
+              <br className="hidden sm:block" />
+              {" "}отражающее <span className="italic">вашу историю</span>.
+            </blockquote>
           </ScrollReveal>
         </div>
       </section>
