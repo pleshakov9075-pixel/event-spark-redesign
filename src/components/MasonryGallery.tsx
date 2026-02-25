@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import type { MediaItem } from "@/content/media";
@@ -69,56 +70,59 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
         </div>
       </div>
 
-      <AnimatePresence>
-        {activePhoto && (
-          <motion.div
-            className="fixed inset-0 z-[70] bg-black/92 p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <button
-              type="button"
-              onClick={() => setActiveIndex(null)}
-              className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/26 text-white hover:border-white/62"
-              aria-label="Закрыть фото"
+      {createPortal(
+        <AnimatePresence>
+          {activePhoto && (
+            <motion.div
+              className="fixed inset-0 z-[9999] bg-black/92 p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <X className="h-5 w-5" />
-            </button>
-
-            <div className="flex h-full items-center justify-center gap-3">
               <button
                 type="button"
-                onClick={goPrev}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/24 text-white hover:border-white/58"
-                aria-label="Предыдущее фото"
+                onClick={() => setActiveIndex(null)}
+                className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/26 text-white hover:border-white/62"
+                aria-label="Закрыть фото"
               >
-                <ChevronLeft className="h-5 w-5" />
+                <X className="h-5 w-5" />
               </button>
 
-              <motion.img
-                key={activePhoto.id}
-                src={activePhoto.src}
-                alt="Крупный просмотр"
-                className="max-h-[88vh] max-w-[84vw] rounded-2xl border border-white/18 object-contain"
-                initial={{ y: 24, opacity: 0, scale: 0.98 }}
-                animate={{ y: 0, opacity: 1, scale: 1 }}
-                exit={{ opacity: 0.2, scale: 0.98 }}
-                transition={{ duration: 0.24 }}
-              />
+              <div className="flex h-full items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/24 text-white hover:border-white/58"
+                  aria-label="Предыдущее фото"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
 
-              <button
-                type="button"
-                onClick={goNext}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/24 text-white hover:border-white/58"
-                aria-label="Следующее фото"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                <motion.img
+                  key={activePhoto.id}
+                  src={activePhoto.src}
+                  alt="Крупный просмотр"
+                  className="max-h-[88vh] max-w-[84vw] rounded-2xl border border-white/18 object-contain"
+                  initial={{ y: 24, opacity: 0, scale: 0.98 }}
+                  animate={{ y: 0, opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0.2, scale: 0.98 }}
+                  transition={{ duration: 0.24 }}
+                />
+
+                <button
+                  type="button"
+                  onClick={goNext}
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/24 text-white hover:border-white/58"
+                  aria-label="Следующее фото"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </section>
   );
 };
