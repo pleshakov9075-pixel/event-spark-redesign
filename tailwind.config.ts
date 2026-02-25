@@ -14,9 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Playfair Display", "serif"],
-        sans: ["Manrope", "sans-serif"],
-        body: ["Manrope", "sans-serif"],
+        display: ["Bebas Neue", "sans-serif"],
+        sans: ["Space Grotesk", "sans-serif"],
+        body: ["Space Grotesk", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
