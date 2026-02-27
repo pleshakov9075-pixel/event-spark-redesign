@@ -92,21 +92,22 @@ const Host = () => {
 
   return (
     <SiteLayout branch="host" ctaLabel="Связаться" ctaHref="#host-contacts">
-      <section className="relative min-h-[calc(100vh-4rem)] bg-[#080b12]">
+      <section className="relative h-[70svh] min-h-[420px] bg-[#080b12] sm:h-[calc(100vh-4rem)]">
         <HeroVideo
           src={hostHero.video}
+          poster={hostHero.poster}
           finalFrameSrc={hostHero.finalFrame}
           loop
           showFinalFrameOnEnd={false}
-          overlayClassName="bg-[linear-gradient(180deg,rgba(6,7,11,0.28)_0%,rgba(8,10,15,0.76)_68%,rgba(8,10,15,0.96)_100%)]"
+          overlayClassName="bg-[linear-gradient(180deg,rgba(6,7,11,0.44)_0%,rgba(8,10,15,0.82)_62%,rgba(8,10,15,0.97)_100%)] sm:bg-[linear-gradient(180deg,rgba(6,7,11,0.28)_0%,rgba(8,10,15,0.76)_68%,rgba(8,10,15,0.96)_100%)]"
         >
           <div className="absolute inset-0 flex items-end">
-            <div className="mx-auto w-full max-w-7xl px-6 pb-14 sm:pb-20">
+            <div className="mx-auto w-full max-w-7xl px-5 pb-8 sm:px-6 sm:pb-20">
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="font-display text-6xl leading-[0.9] tracking-[0.06em] text-[#f7e8ca] sm:text-8xl"
+                className="font-display text-[clamp(2.5rem,14vw,4.2rem)] leading-[0.9] tracking-[0.05em] text-[#f7e8ca] sm:text-8xl"
               >
                 Владимир Башмаков
               </motion.h1>
@@ -114,7 +115,7 @@ const Host = () => {
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-5 max-w-2xl text-sm uppercase tracking-[0.2em] text-[#d4c39f] sm:text-base"
+                className="mt-3 max-w-2xl text-xs uppercase tracking-[0.16em] text-[#d4c39f] sm:mt-5 sm:text-base sm:tracking-[0.2em]"
               >
                 ведущий, продюсер эмоций, амбассадор ярких событий
               </motion.p>

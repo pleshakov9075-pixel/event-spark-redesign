@@ -8,7 +8,7 @@ const CursorGlow = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const finePointerQuery = window.matchMedia("(pointer:fine)");
+    const finePointerQuery = window.matchMedia("(hover:hover) and (pointer:fine) and (min-width:1024px)");
     const updateEnabled = () => setEnabled(finePointerQuery.matches);
     updateEnabled();
 

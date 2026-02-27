@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { usePageTransition } from "@/components/PageTransitionProvider";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type Side = "host" | "agency";
 
@@ -14,6 +15,8 @@ const sideMeta: Record<
     bgImage: string;
     clipPath: string;
     accent: string;
+    mobileAccent: string;
+    imageFilter: string;
   }
 > = {
   host: {
@@ -22,7 +25,9 @@ const sideMeta: Record<
     route: "/host",
     bgImage: "/media/landing/home-host-choice.webp",
     clipPath: "polygon(0 0, 59% 0, 43% 100%, 0 100%)",
-    accent: "from-[#1f3147a6] to-[#0d1119e6]",
+    accent: "from-[#18283ecc] via-[#111a2fbe] to-[#0b111dd9]",
+    mobileAccent: "from-[#1a2a42d6] via-[#121b30ca] to-[#0b101dd9]",
+    imageFilter: "saturate(0.92) hue-rotate(-12deg) brightness(0.88)",
   },
   agency: {
     title: "Ивент-агентство\nArtbox",
@@ -30,13 +35,16 @@ const sideMeta: Record<
     route: "/agency",
     bgImage: "/media/landing/home-agency-choice.webp",
     clipPath: "polygon(59% 0, 100% 0, 100% 100%, 43% 100%)",
-    accent: "from-[#1f1712cc] to-[#111015db]",
+    accent: "from-[#2a2017cc] via-[#19161dbf] to-[#111015db]",
+    mobileAccent: "from-[#2d2218d4] via-[#1b1821cc] to-[#111016dd]",
+    imageFilter: "saturate(1.02) hue-rotate(8deg) brightness(0.9)",
   },
 };
 
 const SplitLanding = () => {
   const navigate = useNavigate();
   const { isTransitioning, startTransition } = usePageTransition();
+  const isMobile = useIsMobile();
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const timeoutRef = useRef<number | null>(null);
 
@@ -46,12 +54,12 @@ const SplitLanding = () => {
   const [cursor, setCursor] = useState({ x: 0, y: 0, visible: false });
 
   useEffect(() => {
-    const query = window.matchMedia("(pointer:fine)");
-    const sync = () => setFinePointer(query.matches);
+    const query = window.matchMedia("(hover:hover) and (pointer:fine)");
+    const sync = () => setFinePointer(query.matches && !isMobile);
     sync();
     query.addEventListener("change", sync);
     return () => query.removeEventListener("change", sync);
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     return () => {
@@ -70,11 +78,11 @@ const SplitLanding = () => {
         variant: side,
         onReady: () => navigate(sideMeta[side].route),
       });
-    }, 560);
+    }, 520);
   };
 
   const updateCursor = (event: ReactMouseEvent<HTMLDivElement>) => {
-    if (!finePointer) return;
+    if (!finePointer || isMobile) return;
     const bounds = wrapRef.current?.getBoundingClientRect();
     if (!bounds) return;
 
@@ -85,10 +93,72 @@ const SplitLanding = () => {
     });
   };
 
+  const sides = Object.keys(sideMeta) as Side[];
+
+  if (isMobile) {
+    return (
+      <section className="relative min-h-[100svh] overflow-hidden bg-[#07080d]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_14%,rgba(220,180,118,0.11),transparent_40%),radial-gradient(circle_at_18%_80%,rgba(75,105,150,0.14),transparent_44%)]" />
+        <div className="relative mx-auto flex min-h-[100svh] w-full max-w-md flex-col px-4 pb-8 pt-8">
+          <p className="text-center text-[10px] uppercase tracking-[0.28em] text-[#b4b7c4]">Выберите направление</p>
+
+          <div className="mt-4 grid gap-4">
+            {sides.map((side) => {
+              const sideData = sideMeta[side];
+              const isSelected = selected === side;
+              const isInactive = selected && !isSelected;
+
+              return (
+                <motion.button
+                  key={side}
+                  type="button"
+                  onClick={() => triggerRoute(side)}
+                  className="interactive relative h-[42svh] min-h-[290px] overflow-hidden rounded-3xl border border-white/10 text-left shadow-[0_16px_40px_rgba(4,5,10,0.45)]"
+                  animate={{ opacity: isInactive ? 0 : 1, scale: isSelected ? 1.01 : 1, y: isInactive ? 20 : 0 }}
+                  transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <img
+                    src={sideData.bgImage}
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover"
+                    style={{ filter: sideData.imageFilter }}
+                    loading="eager"
+                    decoding="async"
+                  />
+                  <div className={`absolute inset-0 bg-gradient-to-b ${sideData.mobileAccent}`} />
+                  <div className="absolute inset-0 bg-black/35" />
+
+                  <div className={`absolute inset-x-0 bottom-0 z-10 p-5 ${side === "agency" ? "text-right" : ""}`}>
+                    <p className="text-[10px] uppercase tracking-[0.24em] text-[#dfcba4]">
+                      {side === "host" ? "Ведущий" : "Агентство"}
+                    </p>
+                    <h1 className="mt-2 whitespace-pre-line font-display text-[2.3rem] leading-[0.9] tracking-[0.04em] text-[#f4e4c8]">
+                      {sideData.title}
+                    </h1>
+                    <p
+                      className={`mt-3 max-w-[16rem] text-[10px] uppercase tracking-[0.16em] text-[#c8cad5] ${
+                        side === "agency" ? "ml-auto" : ""
+                      }`}
+                    >
+                      {sideData.subtitle}
+                    </p>
+                    <span className="mt-4 inline-flex rounded-full border border-[#e2c79066] bg-[#0f1422b8] px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#f1ddb5]">
+                      Открыть
+                    </span>
+                  </div>
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       ref={wrapRef}
-      className="relative h-screen min-h-[640px] overflow-hidden bg-[#07080d]"
+      className="relative h-[100svh] min-h-[640px] overflow-hidden bg-[#07080d]"
       onMouseMove={updateCursor}
       onMouseEnter={() => setCursor((prev) => ({ ...prev, visible: true }))}
       onMouseLeave={() => {
@@ -98,7 +168,7 @@ const SplitLanding = () => {
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(216,180,124,0.14),transparent_45%),radial-gradient(circle_at_12%_85%,rgba(79,111,156,0.16),transparent_46%)]" />
 
-      {(Object.keys(sideMeta) as Side[]).map((side) => {
+      {sides.map((side) => {
         const isHovered = hovered === side;
         const isSelected = selected === side;
         const isInactive = selected && !isSelected;
@@ -113,7 +183,7 @@ const SplitLanding = () => {
             onFocus={() => !selected && setHovered(side)}
             onMouseLeave={() => !selected && setHovered(null)}
             onClick={() => triggerRoute(side)}
-            className="interactive absolute inset-0 cursor-none overflow-hidden text-left"
+            className={`interactive absolute inset-0 overflow-hidden text-left ${finePointer ? "cursor-none" : ""}`}
             style={{ clipPath: sideData.clipPath }}
             animate={{
               clipPath: isSelected ? "polygon(0 0, 100% 0, 100% 100%, 0 100%)" : sideData.clipPath,
@@ -128,6 +198,7 @@ const SplitLanding = () => {
               className="absolute inset-0 h-full w-full object-cover"
               animate={{ scale: isHovered && !selected ? 1.06 : 1 }}
               transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              style={{ filter: sideData.imageFilter }}
               loading="eager"
               decoding="async"
             />
@@ -157,17 +228,19 @@ const SplitLanding = () => {
             />
 
             <div
-              className={`absolute top-1/2 z-10 w-[min(36rem,92vw)] -translate-y-1/2 px-8 sm:px-14 ${
-                side === "host" ? "left-0 sm:left-4" : "right-0 text-right sm:right-4"
+              className={`absolute top-1/2 z-10 w-[min(34rem,88vw)] -translate-y-1/2 px-8 lg:px-14 ${
+                side === "host" ? "left-0 md:left-2" : "right-0 text-right md:right-2"
               }`}
             >
               <p className="text-[11px] uppercase tracking-[0.3em] text-[#d7c5a2]">
                 {side === "host" ? "Ведущий" : "Агентство"}
               </p>
-              <h1 className="mt-4 whitespace-pre-line font-display text-5xl leading-[0.9] tracking-[0.06em] text-[#f5e5c8] sm:text-7xl">
+              <h1 className="mt-4 whitespace-pre-line font-display text-[clamp(2.2rem,6.2vw,5.6rem)] leading-[0.9] tracking-[0.06em] text-[#f5e5c8]">
                 {sideData.title}
               </h1>
-              <p className="mt-5 max-w-[22rem] text-sm uppercase tracking-[0.18em] text-[#c0c1cc] sm:text-[13px]">{sideData.subtitle}</p>
+              <p className={`mt-5 text-sm uppercase tracking-[0.18em] text-[#c0c1cc] ${side === "agency" ? "ml-auto max-w-[23rem]" : "max-w-[22rem]"}`}>
+                {sideData.subtitle}
+              </p>
             </div>
           </motion.button>
         );

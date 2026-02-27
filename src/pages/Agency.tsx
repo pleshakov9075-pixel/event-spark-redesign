@@ -120,23 +120,23 @@ const Agency = () => {
 
   return (
     <SiteLayout branch="agency" ctaLabel="Обсудить проект" ctaHref="#agency-contacts">
-      <section className="relative min-h-[calc(100vh-4rem)]">
+      <section className="relative h-[70svh] min-h-[420px] sm:h-[calc(100vh-4rem)]">
         <HeroVideo
           src={agencyHero.video}
           poster={agencyHero.poster}
           finalFrameSrc={agencyHero.finalFrame}
           loop
           showFinalFrameOnEnd={false}
-          overlayClassName="bg-[linear-gradient(180deg,rgba(8,8,12,0.18)_0%,rgba(9,9,13,0.72)_66%,rgba(9,9,13,0.94)_100%)]"
+          overlayClassName="bg-[linear-gradient(180deg,rgba(8,8,12,0.36)_0%,rgba(9,9,13,0.8)_64%,rgba(9,9,13,0.95)_100%)] sm:bg-[linear-gradient(180deg,rgba(8,8,12,0.18)_0%,rgba(9,9,13,0.72)_66%,rgba(9,9,13,0.94)_100%)]"
         >
           <div className="absolute inset-0 flex items-end">
-            <div className="mx-auto w-full max-w-7xl px-6 pb-14 sm:pb-20">
-              <BrandLogo className="w-[220px] max-w-[58vw] sm:w-[280px]" priority />
+            <div className="mx-auto w-full max-w-7xl px-5 pb-8 sm:px-6 sm:pb-20">
+              <BrandLogo className="w-[155px] max-w-[54vw] sm:w-[280px]" priority />
               <motion.p
                 initial={{ opacity: 0, y: 22 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.14, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-6 max-w-4xl text-sm uppercase tracking-[0.18em] text-[#ddc79a] sm:text-base"
+                className="mt-3 max-w-4xl rounded-xl bg-[#0c1019b3] p-3 text-xs uppercase tracking-[0.12em] text-[#ddc79a] sm:mt-6 sm:bg-transparent sm:p-0 sm:text-base sm:tracking-[0.18em]"
               >
                 ART BOX — творческая лаборатория, где каждое событие рождается как живая история: с настроением,
                 эмоциями и тонкой атмосферой. Мы работаем с теми, кто ценит глубину, эстетику и смысл.
