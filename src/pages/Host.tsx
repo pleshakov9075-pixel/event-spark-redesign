@@ -1,213 +1,297 @@
 import { useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Mic, Heart, Zap, Smile, Star, Users, Music, Palette, MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Navbar from "@/components/Navbar";
+import { AnimatePresence, motion } from "framer-motion";
+import { X } from "lucide-react";
+import HeroVideo from "@/components/HeroVideo";
 import ScrollReveal from "@/components/ScrollReveal";
-import SectionHeading from "@/components/SectionHeading";
-import TestimonialSlider from "@/components/TestimonialSlider";
-import FAQSection from "@/components/FAQSection";
-import Calculator from "@/components/Calculator";
-import EventGallery from "@/components/EventGallery";
-import StatsCounter from "@/components/StatsCounter";
-import Footer from "@/components/Footer";
-import { useRef } from "react";
+import SiteLayout from "@/components/SiteLayout";
+import { cn } from "@/lib/utils";
+import {
+  hostHero,
+  hostPhotoShowcase,
+  hostVideoTiles,
+  siteContacts,
+  type HostPhotoVariant,
+} from "@/content/siteData";
 
-const hormones = [
-  { name: "Серотонин", desc: "Хорошее настроение. Тёплая атмосфера, в которой каждый гость чувствует себя значимым.", icon: Smile, color: "text-host" },
-  { name: "Окситоцин", desc: "Расслабленность. Гости чувствуют себя комфортно и раскрепощённо.", icon: Heart, color: "text-secondary" },
-  { name: "Эндорфин", desc: "Трогательные моменты. Искренние эмоции, от которых наворачиваются слёзы радости.", icon: Star, color: "text-host-glow" },
-  { name: "Дофамин", desc: "Мурашки. Каждый следующий момент лучше предыдущего.", icon: Zap, color: "text-accent" },
-  { name: "Адреналин", desc: "Драйв и энергия. Моменты, от которых захватывает дух.", icon: Mic, color: "text-secondary" },
-];
-
-const features = [
-  { icon: Users, text: "Не принуждаю к интерактивам и поздравлениям. Не перетягиваю одеяло. Главные — вы и гости" },
-  { icon: Music, text: "Использую информацию о вас и гостях. Уникальный контент будет только на вашей свадьбе" },
-  { icon: Palette, text: "На моих мероприятиях весело и старшему, и младшему поколению — универсальная программа" },
-  { icon: Heart, text: "Создаю трогательные и одновременно смешные церемонии индивидуально под вашу историю" },
-  { icon: MessageCircle, text: "Консультация по свадебным специалистам: кого бронировать и на что обратить внимание" },
+const services = [
+  { title: "Свадьбы", description: "Авторская драматургия вечера, мягкий темп и живые интерактивы." },
+  { title: "Корпоративы", description: "Энергия, командная динамика и интеллигентный юмор без перегруза." },
+  { title: "Частные события", description: "Камерные ужины, юбилеи и вечера, где важна атмосфера и такт." },
+  { title: "Форумы и премии", description: "Сценическая уверенность, работа с аудиторией и точный тайминг." },
 ];
 
 const testimonials = [
-  { name: "Ирина", text: "Я не знала, что бывает так: ты просто рассказываешь, что хочешь почувствовать, а Владимир делает так, что это случается. Получился вечер, где каждый гость был внутри большой истории, а не просто на празднике.", event: "Свадьба" },
-  { name: "Никита", text: "Мы хотели корпоратив не ради галочки, а с настроением и смыслом. Владимир продумал всё: динамику, музыку, атмосферу. Вечер прошёл идеально — это был подарок всей нашей команде.", event: "Корпоратив" },
-  { name: "Арина", text: "У нас не было времени на долгие репетиции. Владимир сам всё увидел и сделал. Красиво, точно, вовремя. Когда ты на мероприятии и тебе самому хочется аплодировать — это про него.", event: "Свадьба" },
+  {
+    author: "Екатерина",
+    text: "Владимир дал ощущение, что весь вечер выстроен точно под нас. Легко, стильно, без пауз и неловкости.",
+  },
+  {
+    author: "Андрей",
+    text: "Редкое сочетание: интеллигентный юмор, энергия и чувство меры. Гости после мероприятия отдельно писали слова благодарности.",
+  },
+  {
+    author: "Марина",
+    text: "Не было ни одного шаблонного момента. Всё звучало живо и персонально, а праздник пролетел на одном дыхании.",
+  },
 ];
 
-const faqItems = [
-  { q: "Как будут выстроены поздравления гостей?", a: "1) Заранее уточняю, готов ли человек говорить тост. 2) Благодаря описаниям гостей готовлю представление каждого — так комфортнее выходить. 3) Предлагаю рассказать забавную историю или первое впечатление от знакомства, чтобы поздравление было живым и душевным." },
-  { q: "Можете провести свадьбу без конкурсов?", a: "В таком случае будет больше общения вместо конкурсов. Мой подход — создание атмосферы, а не заполнение времени." },
-  { q: "Что будет на первой встрече?", a: "Вначале мы знакомимся — это важно, чтобы понять, с кем проведём один из важных дней в жизни. Если вы знаете, какую свадьбу хотите — помогу реализовать идеи. Если нет — подберу формат под вас и ваших гостей." },
-  { q: "Как происходит подготовка к мероприятию?", a: "Утверждаем программу: церемонию, интерактивы, традиции, выступления. Я формирую интерактивы под вас и гостей, работаю с информацией о вашей истории любви, готовлю представление каждого гостя с шутками, информирую гостей в чате и отвечаю на все вопросы." },
-  { q: "За какое время приезжаете на площадку?", a: "Приезжаем с DJ за 1,5–2 часа до мероприятия, чтобы встречать гостей будучи полностью подготовленными." },
-  { q: "Будут ли перерывы на танцы и общение?", a: "Обязательно! Соблюдаю баланс между программой и перерывами. Гости хотят потанцевать, поболтать, подышать воздухом — всего будет в меру, чтобы никто не устал." },
-  { q: "Молодёжь и старшее поколение — как сделать интересно всем?", a: "Подбираю интерактивы и программу так, чтобы комфортно чувствовали себя люди любых возрастов. Программа будет интересна и понятна как старшему поколению, так и молодёжи." },
-];
-
-const galleryImages = [
-  { src: "/images/host-portrait.png", alt: "Владимир Башмаков — портрет", category: "Портрет" },
-  { src: "/images/host-event.png", alt: "На мероприятии", category: "Свадьбы" },
-  { src: "/images/host-guests.jpg", alt: "С гостями", category: "Свадьбы" },
-  { src: "/images/event-wedding-1.jpg", alt: "Свадебный банкет", category: "Свадьбы" },
-  { src: "/images/event-wedding-2.jpg", alt: "Выездная церемония", category: "Свадьбы" },
-  { src: "/images/event-corporate-1.jpg", alt: "Корпоративное мероприятие", category: "Корпоративы" },
-  { src: "/images/event-birthday.jpg", alt: "День рождения", category: "Дни рождения" },
-  { src: "/images/event-dinner.jpg", alt: "Камерный ужин", category: "Частные ужины" },
-  { src: "/images/event-gala.jpg", alt: "Гала-вечер", category: "Корпоративы" },
-];
-
-const stats = [
-  { value: 15, suffix: "+", label: "Лет с микрофоном" },
-  { value: 500, suffix: "+", label: "Мероприятий" },
-  { value: 30, suffix: "+", label: "Городов" },
-  { value: 98, suffix: "%", label: "Рекомендуют" },
-];
+const photoLayoutClass: Record<HostPhotoVariant, string> = {
+  accent: "h-[35rem] sm:h-[43rem] md:col-span-4 md:row-span-8 md:h-auto",
+  wide: "h-64 sm:h-72 md:col-span-8 md:row-span-4 md:h-auto",
+  tall: "h-[28rem] sm:h-[34rem] md:col-span-4 md:row-span-5 md:h-auto",
+  square: "h-72 sm:h-80 md:col-span-4 md:row-span-4 md:h-auto",
+};
 
 const Host = () => {
-  const [calcOpen, setCalcOpen] = useState(false);
-  const heroRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
+  const [activeVideo, setActiveVideo] = useState<(typeof hostVideoTiles)[number] | null>(null);
 
   return (
-    <main className="min-h-screen bg-background">
-      <Navbar
-        accent="host"
-        cta={{ label: "Рассчитать стоимость", onClick: () => setCalcOpen(true) }}
-      />
-
-      {/* Hero with parallax */}
-      <section ref={heroRef} className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-16 sm:pt-20 relative overflow-hidden">
-        <motion.div className="absolute inset-0" style={{ y: heroY }}>
-          <img src="/images/host-hero.png" alt="Владимир Башмаков — ведущий" className="w-full h-full object-cover scale-110" loading="lazy" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/75 to-background/40" />
-          <div className="absolute inset-0 bg-gradient-hero-host" />
-        </motion.div>
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 1 }}
-              className="flex items-center justify-center gap-3 mb-4 sm:mb-5"
-            >
-              <span className="h-px w-8 sm:w-10 bg-host/40" />
-              <span className="font-body text-host text-xs sm:text-sm tracking-[0.25em] uppercase font-medium">Ведущий мероприятий</span>
-              <span className="h-px w-8 sm:w-10 bg-host/40" />
-            </motion.div>
-            <h1 className="font-display font-bold mb-4 sm:mb-6">
-              Амбассадор <br />
-              <span className="text-gradient-emerald">ярких событий</span>
-            </h1>
-            <p className="font-body text-foreground/60 text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2">
-              15 лет с микрофоном. Комфортно, интеллигентно, весело, с душой, индивидуально и современно.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-              <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-emerald hover:opacity-90 text-primary-foreground text-sm sm:text-base px-6 sm:px-8 interactive">
-                Рассчитать стоимость
-              </Button>
-              <Button variant="outline" size="lg" className="border-host/25 text-host hover:bg-host/10 text-sm sm:text-base px-6 sm:px-8 interactive">
-                Познакомимся?
-              </Button>
+    <SiteLayout branch="host" ctaLabel="Связаться" ctaHref="#host-cta">
+      <section className="relative min-h-[calc(100vh-4rem)]">
+        <HeroVideo
+          src={hostHero.video}
+          poster={hostHero.poster}
+          finalFrameSrc={hostHero.finalFrame}
+          loop
+          showFinalFrameOnEnd={false}
+          overlayClassName="bg-[linear-gradient(180deg,rgba(6,7,11,0.22)_0%,rgba(8,10,15,0.74)_70%,rgba(8,10,15,0.95)_100%)]"
+        >
+          <div className="absolute inset-0 flex items-end">
+            <div className="mx-auto w-full max-w-7xl px-4 pb-14 sm:px-6 sm:pb-20">
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="font-display text-6xl leading-[0.9] tracking-[0.06em] text-[#f7e8ca] sm:text-8xl"
+              >
+                Владимир Башмаков
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-5 max-w-2xl text-sm uppercase tracking-[0.2em] text-[#d4c39f] sm:text-base"
+              >
+                ведущий, продюсер эмоций, амбассадор ярких событий
+              </motion.p>
             </div>
-          </motion.div>
+          </div>
+        </HeroVideo>
+      </section>
+
+      <section className="px-4 py-16 sm:px-6 sm:py-24">
+        <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-2 lg:gap-14">
+          <ScrollReveal>
+            <div>
+              <p className="text-xs uppercase tracking-[0.26em] text-[#c6b18b]">О Владимире</p>
+              <h2 className="mt-3 font-display text-5xl leading-[0.92] tracking-[0.06em] text-[#f4e3c3] sm:text-6xl">
+                Мероприятия, которые запоминают сердцем
+              </h2>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal delay={0.08}>
+            <p className="text-base leading-relaxed text-[#b3b6c4]">
+              Работаю с аудиторией более 15 лет. Беру на себя ритм события, собираю внимание гостей и сохраняю
+              лёгкость вечера. Вместо формальностей создаю живую историю, где каждый чувствует себя на своём месте.
+            </p>
+          </ScrollReveal>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
-          <StatsCounter stats={stats} />
-        </div>
-      </section>
-
-      {/* Gallery */}
-      <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-dark">
-        <div className="max-w-6xl mx-auto">
-          <SectionHeading title="Галерея мероприятий" subtitle="Свадьбы, корпоративы, частные ужины и дни рождения" />
-          <EventGallery images={galleryImages} accent="emerald" />
-        </div>
-      </section>
-
-      {/* Storytelling - Hormones */}
-      <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
-          <SectionHeading title="Пять гормонов вашего праздника" subtitle="На мероприятиях стараюсь, чтобы гости почувствовали выброс этих пяти гормонов — и напрочь забыли про кортизол." />
-          <div className="space-y-3 sm:space-y-4">
-            {hormones.map((h, i) => {
-              const Icon = h.icon;
-              return (
-                <ScrollReveal key={h.name} delay={i * 0.05} direction={i % 2 === 0 ? "left" : "right"}>
-                  <motion.div
-                    whileHover={{ scale: 1.01, x: i % 2 === 0 ? 6 : -6 }}
-                    className="flex items-start gap-4 sm:gap-6 p-5 sm:p-6 md:p-8 rounded-2xl glass-strong border border-border/50 hover:border-host/30 transition-all group interactive"
-                  >
-                    <div className="w-11 h-11 sm:w-13 sm:h-13 rounded-xl bg-host/8 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-host/15 transition-all">
-                      <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${h.color}`} />
-                    </div>
+      <section className="bg-[#0d1018] px-4 py-16 sm:px-6 sm:py-24">
+        <div className="mx-auto w-full max-w-7xl">
+          <ScrollReveal>
+            <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Фото</h3>
+          </ScrollReveal>
+          <div className="mt-3 max-w-2xl text-sm leading-relaxed text-[#aeb2c1]">
+            Акцентный кадр открывает блок, остальная подборка показывает динамику сцен, форумов и работы с залом.
+          </div>
+          <div className="mt-7 grid grid-cols-1 gap-4 md:auto-rows-[82px] md:grid-cols-12">
+            {hostPhotoShowcase.map((photo, index) => (
+              <ScrollReveal key={photo.src} delay={index * 0.04}>
+                <motion.figure
+                  whileHover={{ y: -6, scale: 1.01 }}
+                  transition={{ type: "spring", stiffness: 210, damping: 24 }}
+                  className={cn(
+                    "group relative overflow-hidden rounded-2xl border bg-[#11131b] will-change-transform",
+                    photo.accent
+                      ? "border-[#d6b57a7a] shadow-[0_16px_50px_rgba(214,181,122,0.22)]"
+                      : "border-white/10",
+                    photoLayoutClass[photo.variant],
+                  )}
+                >
+                  <img
+                    src={photo.src}
+                    alt={photo.alt}
+                    className={cn(
+                      "h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]",
+                      photo.accent && "grayscale",
+                    )}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div
+                    className={cn(
+                      "pointer-events-none absolute inset-0 bg-gradient-to-t via-transparent to-transparent",
+                      photo.accent
+                        ? "from-black/82 via-black/26"
+                        : "from-black/72 via-black/18 group-hover:from-black/60",
+                    )}
+                  />
+                  <figcaption className="absolute bottom-0 left-0 right-0 flex items-end justify-between gap-4 p-4 sm:p-5">
                     <div>
-                      <h3 className="font-display text-lg sm:text-xl md:text-2xl font-semibold mb-1">{h.name}</h3>
-                      <p className="font-body text-muted-foreground text-xs sm:text-sm md:text-base leading-relaxed">{h.desc}</p>
+                      <p className="text-[10px] uppercase tracking-[0.22em] text-[#d8c5a0]">Host archive</p>
+                      <p className="mt-1 text-sm text-[#f5e7cb] sm:text-base">{photo.label}</p>
                     </div>
-                  </motion.div>
-                </ScrollReveal>
-              );
-            })}
+                    {photo.accent && (
+                      <span className="rounded-full border border-[#d8bb8899] bg-[#d8bb8824] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[#f2dfbe]">
+                        Accent
+                      </span>
+                    )}
+                  </figcaption>
+                </motion.figure>
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-dark">
-        <div className="max-w-5xl mx-auto">
-          <SectionHeading title="Почему выбирают меня" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {features.map((f, i) => {
-              const Icon = f.icon;
-              return (
-                <ScrollReveal key={i} delay={i * 0.05}>
-                  <motion.div
-                    whileHover={{ y: -4, scale: 1.02 }}
-                    className="p-5 sm:p-7 rounded-2xl glass-strong border border-border/50 hover:border-host/30 transition-all group interactive hover:shadow-emerald"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-host/8 flex items-center justify-center mb-4 group-hover:bg-host/15 group-hover:scale-110 transition-all">
-                      <Icon className="w-5 h-5 text-host" />
-                    </div>
-                    <p className="font-body text-sm text-foreground/80 leading-relaxed">{f.text}</p>
-                  </motion.div>
-                </ScrollReveal>
-              );
-            })}
+      <section className="px-4 py-16 sm:px-6 sm:py-24">
+        <div className="mx-auto w-full max-w-7xl">
+          <ScrollReveal>
+            <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Видео</h3>
+          </ScrollReveal>
+          <div className="mt-7 grid gap-4 sm:grid-cols-2">
+            {hostVideoTiles.map((video, index) => (
+              <ScrollReveal key={video.src} delay={index * 0.05}>
+                <button
+                  type="button"
+                  onClick={() => setActiveVideo(video)}
+                  className="interactive group relative overflow-hidden rounded-2xl border border-white/10 bg-[#11131b] text-left"
+                >
+                  <video
+                    src={video.src}
+                    poster={video.poster}
+                    className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    muted
+                    loop
+                    playsInline
+                    preload="none"
+                    onMouseEnter={(event) => {
+                      event.currentTarget.play().catch(() => undefined);
+                    }}
+                    onMouseLeave={(event) => {
+                      event.currentTarget.pause();
+                      event.currentTarget.currentTime = 0;
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 p-5">
+                    <p className="text-xs uppercase tracking-[0.2em] text-[#d5c4a0]">Смотреть</p>
+                    <p className="mt-1 text-lg text-[#f4e4c5]">{video.title}</p>
+                  </div>
+                </button>
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <TestimonialSlider testimonials={testimonials} accent="emerald" />
-
-      {/* FAQ */}
-      <FAQSection items={faqItems} accent="emerald" />
-
-      {/* CTA */}
-      <section className="py-20 sm:py-28 md:py-36 px-4 sm:px-6 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-15">
-          <img src="/images/event-wedding-1.jpg" alt="" className="w-full h-full object-cover blur-2xl scale-110" />
-        </div>
-        <ScrollReveal>
-          <div className="max-w-2xl mx-auto text-center relative z-10">
-            <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold text-gradient-emerald mb-4 sm:mb-6">Обсудим ваш праздник?</h2>
-            <p className="font-body text-muted-foreground text-sm sm:text-base mb-6 sm:mb-8 leading-relaxed">Расскажите о вашем мероприятии, и мы создадим для вас что-то особенное.</p>
-            <Button onClick={() => setCalcOpen(true)} size="lg" className="bg-gradient-emerald hover:opacity-90 text-primary-foreground text-sm sm:text-base px-8 sm:px-10 interactive">
-              Рассчитать стоимость
-            </Button>
+      <section className="bg-[#0d1018] px-4 py-16 sm:px-6 sm:py-24">
+        <div className="mx-auto w-full max-w-7xl">
+          <ScrollReveal>
+            <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Форматы и услуги</h3>
+          </ScrollReveal>
+          <div className="mt-7 grid gap-4 md:grid-cols-2">
+            {services.map((service, index) => (
+              <ScrollReveal key={service.title} delay={index * 0.05}>
+                <article className="rounded-2xl border border-white/10 bg-[#11131bd1] p-6">
+                  <h4 className="font-display text-3xl tracking-[0.05em] text-[#f5e6c8]">{service.title}</h4>
+                  <p className="mt-2 text-sm leading-relaxed text-[#afb1be]">{service.description}</p>
+                </article>
+              </ScrollReveal>
+            ))}
           </div>
-        </ScrollReveal>
+        </div>
       </section>
 
-      <Footer />
-      <Calculator isOpen={calcOpen} onClose={() => setCalcOpen(false)} variant="host" />
-    </main>
+      <section className="px-4 py-16 sm:px-6 sm:py-24">
+        <div className="mx-auto w-full max-w-7xl">
+          <ScrollReveal>
+            <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Отзывы</h3>
+          </ScrollReveal>
+          <div className="mt-7 grid gap-4 md:grid-cols-3">
+            {testimonials.map((item, index) => (
+              <ScrollReveal key={item.author} delay={index * 0.05}>
+                <article className="rounded-2xl border border-white/10 bg-[#10131bcc] p-5">
+                  <p className="text-sm leading-relaxed text-[#b5b8c6]">{item.text}</p>
+                  <p className="mt-4 text-xs uppercase tracking-[0.2em] text-[#dfcaa0]">{item.author}</p>
+                </article>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="host-cta" className="bg-[#0d1018] px-4 py-20 sm:px-6 sm:py-24">
+        <div className="mx-auto w-full max-w-3xl text-center">
+          <ScrollReveal>
+            <h3 className="font-display text-5xl tracking-[0.08em] text-[#f3e1bf] sm:text-6xl">Связаться / Оставить заявку</h3>
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-[#aeb2c1]">
+              Напишите в мессенджер или позвоните. Обсудим формат события и предложим сценарий под ваш вечер.
+            </p>
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+              <a
+                href={siteContacts.phoneLink}
+                className="interactive rounded-full border border-[#d6b57a80] bg-[#d6b57a1f] px-6 py-3 text-xs uppercase tracking-[0.18em] text-[#f5e7cb] transition-colors hover:bg-[#d6b57a33]"
+              >
+                Позвонить
+              </a>
+              <a
+                href={siteContacts.emailLink}
+                className="interactive rounded-full border border-white/20 bg-[#141722] px-6 py-3 text-xs uppercase tracking-[0.18em] text-[#d6d8e2] transition-colors hover:border-[#d6b57a66] hover:text-[#f5e7cb]"
+              >
+                Написать
+              </a>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      <AnimatePresence>
+        {activeVideo && (
+          <motion.div
+            className="fixed inset-0 z-[110] flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <button
+              type="button"
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              onClick={() => setActiveVideo(null)}
+              aria-label="Закрыть видео"
+            />
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.98 }}
+              transition={{ duration: 0.28 }}
+              className="relative w-full max-w-4xl overflow-hidden rounded-2xl border border-white/20 bg-black"
+            >
+              <button
+                type="button"
+                onClick={() => setActiveVideo(null)}
+                className="interactive absolute right-3 top-3 z-10 rounded-full border border-white/35 bg-black/60 p-2 text-white"
+              >
+                <X className="h-4 w-4" />
+              </button>
+              <video src={activeVideo.src} poster={activeVideo.poster} controls autoPlay playsInline className="h-full w-full max-h-[78vh] object-contain" />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </SiteLayout>
   );
 };
 
