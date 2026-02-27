@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import HeroVideo from "@/components/HeroVideo";
 import ScrollReveal from "@/components/ScrollReveal";
 import SiteLayout from "@/components/SiteLayout";
@@ -10,7 +10,6 @@ import {
   hostPhotoShowcase,
   hostVideoTiles,
   siteContacts,
-  type HostPhotoVariant,
 } from "@/content/siteData";
 
 const services = [
@@ -35,15 +34,14 @@ const testimonials = [
   },
 ];
 
-const photoLayoutClass: Record<HostPhotoVariant, string> = {
-  accent: "h-[35rem] sm:h-[43rem] md:col-span-4 md:row-span-8 md:h-auto",
-  wide: "h-64 sm:h-72 md:col-span-8 md:row-span-4 md:h-auto",
-  tall: "h-[28rem] sm:h-[34rem] md:col-span-4 md:row-span-5 md:h-auto",
-  square: "h-72 sm:h-80 md:col-span-4 md:row-span-4 md:h-auto",
-};
-
 const Host = () => {
   const [activeVideo, setActiveVideo] = useState<(typeof hostVideoTiles)[number] | null>(null);
+  const [currentPhoto, setCurrentPhoto] = useState(0);
+
+  const goToPrevPhoto = () =>
+    setCurrentPhoto((prev) => (prev === 0 ? hostPhotoShowcase.length - 1 : prev - 1));
+  const goToNextPhoto = () =>
+    setCurrentPhoto((prev) => (prev === hostPhotoShowcase.length - 1 ? 0 : prev + 1));
 
   return (
     <SiteLayout branch="host" ctaLabel="Связаться" ctaHref="#host-cta">
@@ -100,58 +98,93 @@ const Host = () => {
 
       <section className="bg-[#0d1018] px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto w-full max-w-7xl">
-          <ScrollReveal>
-            <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Фото</h3>
-          </ScrollReveal>
-          <div className="mt-3 max-w-2xl text-sm leading-relaxed text-[#aeb2c1]">
-            Акцентный кадр открывает блок, остальная подборка показывает динамику сцен, форумов и работы с залом.
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <ScrollReveal>
+              <div>
+                <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Фото</h3>
+                <div className="mt-3 max-w-2xl text-sm leading-relaxed text-[#aeb2c1]">
+                  Акцентный кадр открывает блок, остальные фото идут полноформатной лентой слева направо.
+                </div>
+              </div>
+            </ScrollReveal>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={goToPrevPhoto}
+                className="interactive rounded-full border border-[#d6b57a55] bg-[#121521] p-2 text-[#e7d2ac] hover:bg-[#181c2a]"
+                aria-label="Листать фото влево"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={goToNextPhoto}
+                className="interactive rounded-full border border-[#d6b57a55] bg-[#121521] p-2 text-[#e7d2ac] hover:bg-[#181c2a]"
+                aria-label="Листать фото вправо"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
           </div>
-          <div className="mt-7 grid grid-cols-1 gap-4 md:auto-rows-[82px] md:grid-cols-12">
-            {hostPhotoShowcase.map((photo, index) => (
-              <ScrollReveal key={photo.src} delay={index * 0.04}>
-                <motion.figure
-                  whileHover={{ y: -6, scale: 1.01 }}
-                  transition={{ type: "spring", stiffness: 210, damping: 24 }}
-                  className={cn(
-                    "group relative overflow-hidden rounded-2xl border bg-[#11131b] will-change-transform",
-                    photo.accent
-                      ? "border-[#d6b57a7a] shadow-[0_16px_50px_rgba(214,181,122,0.22)]"
-                      : "border-white/10",
-                    photoLayoutClass[photo.variant],
-                  )}
-                >
+          <div className="mt-7 overflow-hidden rounded-3xl border border-white/10 bg-[#11131b]">
+            <AnimatePresence mode="wait">
+              <motion.figure
+                key={hostPhotoShowcase[currentPhoto].src}
+                initial={{ opacity: 0, x: 42 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -42 }}
+                transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
+                className="group relative"
+              >
+                <div className="flex h-[62vh] min-h-[380px] items-center justify-center bg-[#0f121a] p-4 sm:h-[70vh] sm:p-8">
                   <img
-                    src={photo.src}
-                    alt={photo.alt}
+                    src={hostPhotoShowcase[currentPhoto].src}
+                    alt={hostPhotoShowcase[currentPhoto].alt}
                     className={cn(
-                      "h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]",
-                      photo.accent && "grayscale",
+                      "h-full w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-[1.02]",
+                      hostPhotoShowcase[currentPhoto].accent && "grayscale",
                     )}
                     loading="lazy"
                     decoding="async"
                   />
-                  <div
-                    className={cn(
-                      "pointer-events-none absolute inset-0 bg-gradient-to-t via-transparent to-transparent",
-                      photo.accent
-                        ? "from-black/82 via-black/26"
-                        : "from-black/72 via-black/18 group-hover:from-black/60",
-                    )}
-                  />
-                  <figcaption className="absolute bottom-0 left-0 right-0 flex items-end justify-between gap-4 p-4 sm:p-5">
-                    <div>
-                      <p className="text-[10px] uppercase tracking-[0.22em] text-[#d8c5a0]">Host archive</p>
-                      <p className="mt-1 text-sm text-[#f5e7cb] sm:text-base">{photo.label}</p>
-                    </div>
-                    {photo.accent && (
-                      <span className="rounded-full border border-[#d8bb8899] bg-[#d8bb8824] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[#f2dfbe]">
-                        Accent
-                      </span>
-                    )}
-                  </figcaption>
-                </motion.figure>
-              </ScrollReveal>
-            ))}
+                </div>
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/76 via-black/22 to-transparent" />
+                <figcaption className="absolute bottom-0 left-0 right-0 flex items-end justify-between gap-4 p-4 sm:p-7">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.22em] text-[#d8c5a0]">Host archive</p>
+                    <p className="mt-1 text-base text-[#f5e7cb] sm:text-xl">{hostPhotoShowcase[currentPhoto].label}</p>
+                  </div>
+                  {hostPhotoShowcase[currentPhoto].accent && (
+                    <span className="rounded-full border border-[#d8bb8899] bg-[#d8bb8824] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[#f2dfbe]">
+                      Accent
+                    </span>
+                  )}
+                </figcaption>
+              </motion.figure>
+            </AnimatePresence>
+            <div className="flex items-center justify-between border-t border-white/10 bg-[#0f121acc] px-4 py-3 sm:px-6">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#b7ab90]">
+                {String(currentPhoto + 1).padStart(2, "0")} / {String(hostPhotoShowcase.length).padStart(2, "0")}
+              </p>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={goToPrevPhoto}
+                  className="interactive rounded-full border border-[#d6b57a55] bg-[#121521] p-2 text-[#e7d2ac] hover:bg-[#181c2a]"
+                  aria-label="Предыдущее фото"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={goToNextPhoto}
+                  className="interactive rounded-full border border-[#d6b57a55] bg-[#121521] p-2 text-[#e7d2ac] hover:bg-[#181c2a]"
+                  aria-label="Следующее фото"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -161,38 +194,69 @@ const Host = () => {
           <ScrollReveal>
             <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Видео</h3>
           </ScrollReveal>
-          <div className="mt-7 grid gap-4 sm:grid-cols-2">
-            {hostVideoTiles.map((video, index) => (
-              <ScrollReveal key={video.src} delay={index * 0.05}>
-                <button
-                  type="button"
-                  onClick={() => setActiveVideo(video)}
-                  className="interactive group relative overflow-hidden rounded-2xl border border-white/10 bg-[#11131b] text-left"
-                >
-                  <video
-                    src={video.src}
-                    poster={video.poster}
-                    className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    muted
-                    loop
-                    playsInline
-                    preload="none"
-                    onMouseEnter={(event) => {
-                      event.currentTarget.play().catch(() => undefined);
-                    }}
-                    onMouseLeave={(event) => {
-                      event.currentTarget.pause();
-                      event.currentTarget.currentTime = 0;
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-                  <div className="absolute bottom-0 left-0 p-5">
-                    <p className="text-xs uppercase tracking-[0.2em] text-[#d5c4a0]">Смотреть</p>
-                    <p className="mt-1 text-lg text-[#f4e4c5]">{video.title}</p>
-                  </div>
-                </button>
-              </ScrollReveal>
-            ))}
+          <div className="mt-7 space-y-6">
+            <ScrollReveal>
+              <button
+                type="button"
+                onClick={() => setActiveVideo(hostVideoTiles[0])}
+                className="interactive group relative w-full overflow-hidden rounded-3xl border border-[#d6b57a4d] bg-[#11131b] text-left shadow-[0_24px_70px_rgba(0,0,0,0.4)]"
+              >
+                <video
+                  src={hostVideoTiles[0].src}
+                  poster={hostVideoTiles[0].poster}
+                  className="aspect-[16/8.6] min-h-[320px] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] sm:min-h-[440px]"
+                  muted
+                  loop
+                  playsInline
+                  preload="none"
+                  onMouseEnter={(event) => {
+                    event.currentTarget.play().catch(() => undefined);
+                  }}
+                  onMouseLeave={(event) => {
+                    event.currentTarget.pause();
+                    event.currentTarget.currentTime = 0;
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-5 sm:p-8">
+                  <p className="text-xs uppercase tracking-[0.2em] text-[#d5c4a0]">Смотреть</p>
+                  <p className="mt-1 text-3xl text-[#f4e4c5] sm:text-5xl">{hostVideoTiles[0].title}</p>
+                </div>
+              </button>
+            </ScrollReveal>
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {hostVideoTiles.slice(1).map((video, index) => (
+                <ScrollReveal key={video.src} delay={index * 0.05}>
+                  <button
+                    type="button"
+                    onClick={() => setActiveVideo(video)}
+                    className="interactive group relative overflow-hidden rounded-2xl border border-white/10 bg-[#11131b] text-left"
+                  >
+                    <video
+                      src={video.src}
+                      poster={video.poster}
+                      className="aspect-[16/10] min-h-[280px] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] sm:min-h-[320px]"
+                      muted
+                      loop
+                      playsInline
+                      preload="none"
+                      onMouseEnter={(event) => {
+                        event.currentTarget.play().catch(() => undefined);
+                      }}
+                      onMouseLeave={(event) => {
+                        event.currentTarget.pause();
+                        event.currentTarget.currentTime = 0;
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/24 to-transparent" />
+                    <div className="absolute bottom-0 left-0 p-5">
+                      <p className="text-xs uppercase tracking-[0.2em] text-[#d5c4a0]">Смотреть</p>
+                      <p className="mt-1 text-2xl text-[#f4e4c5]">{video.title}</p>
+                    </div>
+                  </button>
+                </ScrollReveal>
+              ))}
+            </div>
           </div>
         </div>
       </section>

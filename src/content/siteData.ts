@@ -12,7 +12,7 @@ export const siteContacts = {
 };
 
 export const hostHero = {
-  video: "/media/videos/host-hero-placeholder.mp4",
+  video: "/media/videos/host-hero.mp4",
   poster: "/media/images/host-hero-poster.jpg",
   finalFrame: "/images/host-hero.png",
 };
