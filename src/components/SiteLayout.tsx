@@ -52,7 +52,7 @@ const routeTabs = [
 ];
 
 const SiteLayout = ({ branch, ctaLabel, ctaHref, navigationBasePath, children }: SiteLayoutProps) => {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [sideMenuOpen, setSideMenuOpen] = useState(false);
   const [quickOpen, setQuickOpen] = useState(false);
   const [quickName, setQuickName] = useState("");
   const [quickPhone, setQuickPhone] = useState("");
@@ -71,11 +71,11 @@ const SiteLayout = ({ branch, ctaLabel, ctaHref, navigationBasePath, children }:
   );
 
   useEffect(() => {
-    setMobileOpen(false);
+    setSideMenuOpen(false);
   }, [location.pathname]);
 
   useEffect(() => {
-    if (!mobileOpen) {
+    if (!sideMenuOpen && !quickOpen) {
       document.body.style.overflow = "";
       return;
     }
@@ -83,7 +83,10 @@ const SiteLayout = ({ branch, ctaLabel, ctaHref, navigationBasePath, children }:
     return () => {
       document.body.style.overflow = "";
     };
-  }, [mobileOpen]);
+  }, [sideMenuOpen, quickOpen]);
+
+  const isRouteActive = (to: string) =>
+    to === "/" ? location.pathname === "/" : location.pathname === to || location.pathname.startsWith(`${to}/`);
 
   const submitQuickLead = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -123,118 +126,121 @@ const SiteLayout = ({ branch, ctaLabel, ctaHref, navigationBasePath, children }:
             <BrandLogo className="w-[150px] sm:w-[172px]" priority />
           </Link>
 
-          <nav className="hidden items-center gap-1 xl:flex">
-            {sectionNav.map((item) => (
-              <a
-                key={item.href}
-                href={navigationBasePath ? `${navigationBasePath}${item.href}` : item.href}
-                className="group interactive relative rounded-xl px-3 py-2 text-xs uppercase tracking-[0.16em] text-[#c4c6d2] hover:text-[#f2dfbe]"
-              >
-                {item.label}
-                <span className="absolute bottom-1 left-3 right-3 h-px origin-left scale-x-0 bg-[#d6b57a] transition-transform duration-300 group-hover:scale-x-100" />
-              </a>
-            ))}
-          </nav>
-
-          <nav className="ml-auto hidden items-center gap-1 md:flex">
-            {routeTabs.map((tab) => {
-              const active =
-                tab.to === "/"
-                  ? location.pathname === "/"
-                  : location.pathname === tab.to || location.pathname.startsWith(`${tab.to}/`);
-              return (
-                <Link
-                  key={tab.to}
-                  to={tab.to}
-                  className={cn(
-                    "group interactive relative rounded-xl px-3 py-2 text-[11px] uppercase tracking-[0.17em] text-[#bfc1cd] hover:text-[#efe0c3]",
-                    active && ui.active,
-                  )}
-                >
-                  {tab.label}
-                  <span
-                    className={cn(
-                      "absolute bottom-1 left-3 right-3 h-px origin-left bg-[#d6b57a] transition-transform duration-300",
-                      active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
-                    )}
-                  />
-                </Link>
-              );
-            })}
-          </nav>
-
-          <button
-            type="button"
-            onClick={() => setQuickOpen(true)}
-            className={cn(
-              "interactive ml-2 hidden rounded-full border px-5 py-2.5 text-[11px] uppercase tracking-[0.16em] transition-colors md:inline-flex",
-              ui.button,
-            )}
-          >
-            {ctaLabel}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setMobileOpen((prev) => !prev)}
-            className="interactive ml-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-[#f1dfbe] hover:border-[#d6b57a80] md:hidden"
-            aria-expanded={mobileOpen}
-            aria-label={mobileOpen ? "Закрыть меню" : "Открыть меню"}
-          >
-            {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </button>
-        </div>
-
-        {mobileOpen && (
-          <div className="border-t border-white/10 bg-[#0b0f18f2] px-6 py-5 md:hidden">
-            <nav className="grid gap-2">
-              {routeTabs.map((tab) => (
-                <Link
-                  key={tab.to}
-                  to={tab.to}
-                  className={cn(
-                    "interactive rounded-xl px-3 py-3 text-sm uppercase tracking-[0.16em] text-[#c8cad6] hover:bg-white/5 hover:text-[#f2dfbe]",
-                    location.pathname === tab.to && "bg-white/5 text-[#f2dfbe]",
-                  )}
-                >
-                  {tab.label}
-                </Link>
-              ))}
-            </nav>
-            <div className="my-4 h-px bg-white/10" />
-            <nav className="grid gap-2">
-              {sectionNav.map((item) => (
-                <a
-                  key={item.href}
-                  href={navigationBasePath ? `${navigationBasePath}${item.href}` : item.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="interactive rounded-xl px-3 py-3 text-sm uppercase tracking-[0.16em] text-[#c8cad6] hover:bg-white/5 hover:text-[#f2dfbe]"
-                >
-                  {item.label}
-                </a>
-              ))}
-            </nav>
+          <div className="ml-auto flex items-center gap-2 sm:gap-3">
             <button
               type="button"
-              onClick={() => {
-                setMobileOpen(false);
-                setQuickOpen(true);
-              }}
+              onClick={() => setQuickOpen(true)}
               className={cn(
-                "interactive mt-4 inline-flex rounded-full border px-5 py-2.5 text-xs uppercase tracking-[0.16em]",
+                "interactive hidden rounded-full border px-5 py-2.5 text-[11px] uppercase tracking-[0.16em] transition-colors sm:inline-flex",
                 ui.button,
               )}
             >
               {ctaLabel}
             </button>
+
+            <button
+              type="button"
+              onClick={() => setSideMenuOpen(true)}
+              className="interactive inline-flex h-10 items-center justify-center gap-2 rounded-full border border-[#d6b57a5f] bg-[#121826ab] px-3.5 text-[#f1dfbe] hover:border-[#d6b57ab8] hover:bg-[#151d2fa8]"
+              aria-expanded={sideMenuOpen}
+              aria-label="Открыть боковое меню"
+            >
+              <Menu className="h-4 w-4" />
+              <span className="hidden text-[11px] uppercase tracking-[0.16em] sm:inline">Меню</span>
+            </button>
           </div>
-        )}
+        </div>
       </header>
 
       <main className="pt-[74px]">{children}</main>
       <Footer />
 
       <AnimatePresence>
+        {sideMenuOpen && (
+          <motion.div
+            className="fixed inset-0 z-[120]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <button
+              type="button"
+              onClick={() => setSideMenuOpen(false)}
+              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+              aria-label="Закрыть меню"
+            />
+
+            <motion.aside
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute right-0 top-0 h-full w-full max-w-[380px] border-l border-[#d6b57a55] bg-[#0b1019f5] shadow-[-24px_0_48px_rgba(2,3,6,0.56)]"
+            >
+              <div className="flex items-center justify-between border-b border-white/10 px-5 py-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-[#dfcba4]">Навигация</p>
+                <button
+                  type="button"
+                  onClick={() => setSideMenuOpen(false)}
+                  className="interactive inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-[#f1dfbe] hover:border-[#d6b57a88]"
+                  aria-label="Закрыть меню"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="flex h-[calc(100%-74px)] flex-col overflow-y-auto px-5 py-5">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[#a9adbb]">Страницы</p>
+                <nav className="mt-2 grid gap-2">
+                  {routeTabs.map((tab) => (
+                    <Link
+                      key={tab.to}
+                      to={tab.to}
+                      onClick={() => setSideMenuOpen(false)}
+                      className={cn(
+                        "interactive rounded-xl border border-transparent px-3 py-2.5 text-sm uppercase tracking-[0.16em] text-[#c8cad6] hover:border-white/10 hover:bg-white/5 hover:text-[#f2dfbe]",
+                        isRouteActive(tab.to) && "border-[#d6b57a4f] bg-[#d6b57a14] text-[#f2dfbe]",
+                      )}
+                    >
+                      {tab.label}
+                    </Link>
+                  ))}
+                </nav>
+
+                <div className="my-5 h-px bg-white/10" />
+
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[#a9adbb]">Разделы страницы</p>
+                <nav className="mt-2 grid gap-2">
+                  {sectionNav.map((item) => (
+                    <a
+                      key={item.href}
+                      href={navigationBasePath ? `${navigationBasePath}${item.href}` : item.href}
+                      onClick={() => setSideMenuOpen(false)}
+                      className="interactive rounded-xl border border-transparent px-3 py-2.5 text-sm uppercase tracking-[0.16em] text-[#c8cad6] hover:border-white/10 hover:bg-white/5 hover:text-[#f2dfbe]"
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                </nav>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSideMenuOpen(false);
+                    setQuickOpen(true);
+                  }}
+                  className={cn(
+                    "interactive mt-6 inline-flex w-full justify-center rounded-full border px-5 py-3 text-xs uppercase tracking-[0.16em]",
+                    ui.button,
+                  )}
+                >
+                  {ctaLabel}
+                </button>
+              </div>
+            </motion.aside>
+          </motion.div>
+        )}
+
         {quickOpen && (
           <motion.div
             className="fixed inset-0 z-[140] flex items-center justify-center p-4"

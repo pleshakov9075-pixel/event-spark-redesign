@@ -101,8 +101,29 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-white/10 pt-6 text-xs uppercase tracking-[0.14em] text-[#8f92a0]">
-          <p>© {new Date().getFullYear()} Владимир Башмаков / Artbox. Все права защищены.</p>
+        <div className="mt-10 border-t border-white/10 pt-6">
+          <a
+            href="https://pelicanstudio.ru"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="interactive group mx-auto inline-flex items-center gap-3 rounded-full border border-[#d6b57a55] bg-[#111623c4] px-4 py-2 hover:border-[#d6b57a99] hover:bg-[#161d2ebd]"
+            aria-label="Перейти на сайт PelicanStudio"
+          >
+            <img
+              src="/pelicanstudio-logo.png"
+              alt="Логотип PelicanStudio"
+              className="h-8 w-8 rounded-lg border border-white/20 object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <span className="font-signature text-[1.72rem] leading-none text-[#f3e5cb] sm:text-[1.95rem]">
+              Design by PelicanStudio
+            </span>
+          </a>
+
+          <p className="mt-4 text-center text-xs uppercase tracking-[0.14em] text-[#8f92a0]">
+            © {new Date().getFullYear()} Владимир Башмаков / Artbox. Все права защищены.
+          </p>
         </div>
       </div>
     </footer>

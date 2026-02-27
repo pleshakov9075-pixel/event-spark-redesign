@@ -237,7 +237,7 @@ const Agency = () => {
         </div>
       </section>
 
-      <section className="bg-[#0d1018] px-6 py-16 sm:py-24">
+      <section id="agency-calculator" className="bg-[#0d1018] px-6 py-16 sm:py-24">
         <div className="mx-auto w-full max-w-7xl">
           <ScrollReveal>
             <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Калькулятор стоимости</h3>

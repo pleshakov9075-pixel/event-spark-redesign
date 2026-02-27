@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Great+Vibes&family=Space+Grotesk:wght@400;500;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -97,6 +97,12 @@
 @layer utilities {
   .interactive {
     @apply transition-all duration-300;
+  }
+
+  .font-signature {
+    font-family: "Great Vibes", cursive;
+    letter-spacing: 0.02em;
+    font-weight: 400;
   }
 }
 
