@@ -1,28 +1,36 @@
 export const agencyPricingConfig = {
   defaultEventType: "wedding",
   defaultGuests: 70,
-  defaultDuration: "6h",
-  guestLimits: { min: 20, max: 500, step: 10 },
+  defaultCity: "Ижевск",
+  defaultContactMethod: "whatsapp",
+  defaultGift: "voice-card",
+  guestLimits: { min: 20, max: 700, step: 10 },
   eventTypes: {
-    wedding: { label: "Свадьба", base: 180000, perGuest: 1300 },
-    corporate: { label: "Корпоратив", base: 210000, perGuest: 1500 },
-    private: { label: "Частный вечер", base: 145000, perGuest: 1100 },
-    brand: { label: "Бренд-ивент", base: 260000, perGuest: 1800 },
+    wedding: { label: "Свадьба", base: 140000, perGuest: 1400 },
+    corporate: { label: "Корпоратив", base: 150000, perGuest: 1600 },
+    private: { label: "Приватное событие", base: 120000, perGuest: 1300 },
+    forum: { label: "Форум / конференция", base: 180000, perGuest: 1700 },
   },
-  durations: {
-    "4h": { label: "4 часа", multiplier: 1 },
-    "6h": { label: "6 часов", multiplier: 1.2 },
-    "8h": { label: "8 часов", multiplier: 1.4 },
-    "10h": { label: "10 часов", multiplier: 1.65 },
+  cityMultipliers: {
+    Ижевск: 1,
+    Москва: 1.28,
+    Казань: 1.17,
+    Пермь: 1.12,
+    Тюмень: 1.14,
+    "Другой город": 1.2,
   },
-  options: [
-    { id: "decor", label: "Декор-концепция", price: 55000 },
-    { id: "content", label: "Фото + видео продакшн", price: 80000 },
-    { id: "artists", label: "Кастинг артистов", price: 90000 },
-    { id: "soundlight", label: "Сценический свет и звук", price: 65000 },
-  ],
+  contactMethods: {
+    whatsapp: { label: "WhatsApp" },
+    telegram: { label: "Telegram" },
+    phone: { label: "Телефонный звонок" },
+  },
+  gifts: {
+    "voice-card": { label: "Голосовая открытка от ART BOX" },
+    "guide-7-details": { label: "Гайд «7 деталей, которые создают атмосферу»" },
+  },
 } as const;
 
 export type EventTypeKey = keyof typeof agencyPricingConfig.eventTypes;
-export type DurationKey = keyof typeof agencyPricingConfig.durations;
-export type OptionId = (typeof agencyPricingConfig.options)[number]["id"];
+export type CityKey = keyof typeof agencyPricingConfig.cityMultipliers;
+export type ContactMethodKey = keyof typeof agencyPricingConfig.contactMethods;
+export type GiftKey = keyof typeof agencyPricingConfig.gifts;

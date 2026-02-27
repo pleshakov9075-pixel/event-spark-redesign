@@ -1,16 +1,13 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Check, Minus, Plus } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Minus, Plus } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   agencyPricingConfig,
-  type DurationKey,
+  type CityKey,
+  type ContactMethodKey,
   type EventTypeKey,
-  type OptionId,
+  type GiftKey,
 } from "@/content/agencyPricing";
 import { siteContacts } from "@/content/siteData";
 
@@ -23,26 +20,21 @@ const money = new Intl.NumberFormat("ru-RU", {
 const AgencyPriceCalculator = () => {
   const [eventType, setEventType] = useState<EventTypeKey>(agencyPricingConfig.defaultEventType);
   const [guests, setGuests] = useState(agencyPricingConfig.defaultGuests);
-  const [duration, setDuration] = useState<DurationKey>(agencyPricingConfig.defaultDuration);
-  const [options, setOptions] = useState<OptionId[]>([]);
+  const [city, setCity] = useState(agencyPricingConfig.defaultCity);
+  const [contactMethod, setContactMethod] = useState<ContactMethodKey>(agencyPricingConfig.defaultContactMethod);
+  const [gift, setGift] = useState<GiftKey>(agencyPricingConfig.defaultGift);
 
   const limits = agencyPricingConfig.guestLimits;
+  const whatsapp = siteContacts.socials.find((item) => item.label === "WhatsApp")?.href ?? siteContacts.phoneLink;
+  const telegram = siteContacts.socials.find((item) => item.label === "Telegram")?.href ?? siteContacts.phoneLink;
 
   const estimate = useMemo(() => {
     const event = agencyPricingConfig.eventTypes[eventType];
-    const time = agencyPricingConfig.durations[duration];
-    const selectedOptionsTotal = options.reduce((sum, optionId) => {
-      const option = agencyPricingConfig.options.find((item) => item.id === optionId);
-      return sum + (option?.price ?? 0);
-    }, 0);
-
-    const base = event.base + guests * event.perGuest + selectedOptionsTotal;
-    return Math.round(base * time.multiplier);
-  }, [duration, eventType, guests, options]);
-
-  const toggleOption = (optionId: OptionId) => {
-    setOptions((prev) => (prev.includes(optionId) ? prev.filter((id) => id !== optionId) : [...prev, optionId]));
-  };
+    const cityMultiplier =
+      agencyPricingConfig.cityMultipliers[city as CityKey] ?? agencyPricingConfig.cityMultipliers["Другой город"];
+    const base = event.base + guests * event.perGuest;
+    return Math.round(base * cityMultiplier);
+  }, [city, eventType, guests]);
 
   const changeGuests = (next: number) => {
     if (Number.isNaN(next)) return;
@@ -50,27 +42,34 @@ const AgencyPriceCalculator = () => {
     setGuests(clamped);
   };
 
-  const buildEstimateMailTo = () => {
-    const selectedOptionLabels = options
-      .map((optionId) => agencyPricingConfig.options.find((item) => item.id === optionId)?.label)
-      .filter(Boolean)
-      .join(", ");
-
-    const body = [
-      "Здравствуйте, прошу подготовить смету.",
-      "",
+  const submitEstimate = () => {
+    const text = [
+      "Здравствуйте! Нужна смета ART BOX.",
       `Тип события: ${agencyPricingConfig.eventTypes[eventType].label}`,
       `Количество гостей: ${guests}`,
-      `Длительность: ${agencyPricingConfig.durations[duration].label}`,
-      `Доп. опции: ${selectedOptionLabels || "не выбраны"}`,
+      `Город: ${city}`,
+      `Предпочтительный канал связи: ${agencyPricingConfig.contactMethods[contactMethod].label}`,
+      `Подарок: ${agencyPricingConfig.gifts[gift].label}`,
       `Примерная стоимость: ${money.format(estimate)}`,
     ].join("\n");
 
-    return `${siteContacts.emailLink}?subject=${encodeURIComponent("Запрос сметы Artbox")}&body=${encodeURIComponent(body)}`;
+    if (contactMethod === "whatsapp") {
+      const base = whatsapp.includes("?") ? `${whatsapp}&` : `${whatsapp}?`;
+      window.open(`${base}text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    if (contactMethod === "telegram") {
+      window.open(telegram, "_blank", "noopener,noreferrer");
+      navigator.clipboard?.writeText(text).catch(() => undefined);
+      return;
+    }
+
+    window.location.href = siteContacts.phoneLink;
   };
 
   return (
-    <section id="agency-calculator" className="rounded-3xl border border-[#d6b57a38] bg-[#101019e8] p-6 sm:p-8">
+    <section id="agency-calculator" className="rounded-3xl border border-[#d6b57a30] bg-[#101019cc] p-6 sm:p-8">
       <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-7">
           <div>
@@ -102,7 +101,6 @@ const AgencyPriceCalculator = () => {
               >
                 <Minus className="h-4 w-4" />
               </button>
-
               <input
                 type="number"
                 min={limits.min}
@@ -113,7 +111,6 @@ const AgencyPriceCalculator = () => {
                 className="w-28 rounded-xl border border-white/15 bg-[#121722] px-3 py-2 text-center font-display text-3xl leading-none text-[#f0dfbe] outline-none focus:border-[#d6b57a80]"
                 aria-label="Введите количество гостей"
               />
-
               <button
                 type="button"
                 onClick={() => changeGuests(guests + limits.step)}
@@ -123,7 +120,6 @@ const AgencyPriceCalculator = () => {
                 <Plus className="h-4 w-4" />
               </button>
             </div>
-
             <input
               type="range"
               min={limits.min}
@@ -136,56 +132,61 @@ const AgencyPriceCalculator = () => {
           </div>
 
           <div>
-            <label htmlFor="duration" className="text-xs uppercase tracking-[0.2em] text-[#b9bac6]">
-              Длительность
+            <label htmlFor="city-name" className="text-xs uppercase tracking-[0.2em] text-[#b9bac6]">
+              Город
             </label>
-            <select
-              id="duration"
-              value={duration}
-              onChange={(event) => setDuration(event.target.value as DurationKey)}
+            <input
+              id="city-name"
+              list="agency-city-list"
+              value={city}
+              onChange={(event) => setCity(event.target.value)}
               className="mt-2 w-full rounded-2xl border border-white/15 bg-[#10131acc] px-4 py-4 text-base text-[#f1e2c4] outline-none transition-colors focus:border-[#d6b57a80]"
-            >
-              {Object.entries(agencyPricingConfig.durations).map(([key, time]) => (
-                <option key={key} value={key} className="bg-[#11131a]">
-                  {time.label}
-                </option>
+              placeholder="Введите город"
+            />
+            <datalist id="agency-city-list">
+              {Object.keys(agencyPricingConfig.cityMultipliers).map((item) => (
+                <option key={item} value={item} />
               ))}
-            </select>
+            </datalist>
           </div>
 
           <div>
-            <span className="text-xs uppercase tracking-[0.2em] text-[#b9bac6]">Дополнительные опции</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-[#b9bac6]">Как связаться?</span>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {Object.entries(agencyPricingConfig.contactMethods).map(([key, value]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setContactMethod(key as ContactMethodKey)}
+                  className={`interactive rounded-full border px-4 py-2 text-xs uppercase tracking-[0.16em] ${
+                    contactMethod === key
+                      ? "border-[#d6b57a99] bg-[#d6b57a26] text-[#f2dfbe]"
+                      : "border-white/20 bg-[#121622] text-[#c9ccda] hover:border-[#d6b57a66]"
+                  }`}
+                >
+                  {value.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <span className="text-xs uppercase tracking-[0.2em] text-[#b9bac6]">Выберите подарок</span>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              {agencyPricingConfig.options.map((option) => {
-                const active = options.includes(option.id);
-                return (
-                  <button
-                    key={option.id}
-                    type="button"
-                    onClick={() => toggleOption(option.id)}
-                    className={`interactive rounded-2xl border px-4 py-4 text-left transition-colors ${
-                      active
-                        ? "border-[#d6b57a99] bg-[#d6b57a1f]"
-                        : "border-white/15 bg-[#11131acc] hover:border-[#d6b57a66]"
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <span className="text-base text-[#f0dfbe]">{option.label}</span>
-                      <span className={`mt-0.5 shrink-0 ${active ? "text-[#f4e3be]" : "text-[#858897]"}`}>
-                        <Check className="h-4 w-4" />
-                      </span>
-                    </div>
-                    <motion.span
-                      key={`${option.id}-${active ? "on" : "off"}`}
-                      initial={{ opacity: 0.5, y: 3 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-1 block text-xs uppercase tracking-[0.15em] text-[#b5b7c3]"
-                    >
-                      + {money.format(option.price)}
-                    </motion.span>
-                  </button>
-                );
-              })}
+              {Object.entries(agencyPricingConfig.gifts).map(([key, value]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setGift(key as GiftKey)}
+                  className={`interactive rounded-2xl border px-4 py-4 text-left text-sm ${
+                    gift === key
+                      ? "border-[#d6b57a99] bg-[#d6b57a1f] text-[#f2dfbe]"
+                      : "border-white/15 bg-[#11131acc] text-[#c3c6d5] hover:border-[#d6b57a66]"
+                  }`}
+                >
+                  {value.label}
+                </button>
+              ))}
             </div>
           </div>
         </div>
@@ -219,23 +220,16 @@ const AgencyPriceCalculator = () => {
           </motion.p>
 
           <p className="mt-4 text-sm leading-relaxed text-[#aeb0bd]">
-            Точная стоимость зависит от площадки, технического райдера и состава команды.
+            Мы не работаем по шаблону «цена за час». Итог формируется от идеи, масштаба и состава команды.
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
-            <a
-              href="#agency-contacts"
-              className="interactive rounded-full border border-[#d6b57a80] bg-[#d6b57a26] px-6 py-3 text-xs uppercase tracking-[0.18em] text-[#f4e3be] hover:bg-[#d6b57a38]"
-            >
-              Получить смету
-            </a>
-            <a
-              href={buildEstimateMailTo()}
-              className="interactive rounded-full border border-white/20 bg-[#121621] px-6 py-3 text-xs uppercase tracking-[0.18em] text-[#d1d4df] hover:border-[#d6b57a66] hover:text-[#f4e3be]"
-            >
-              Отправить смету на email
-            </a>
-          </div>
+          <button
+            type="button"
+            onClick={submitEstimate}
+            className="interactive mt-6 rounded-full border border-[#d6b57a80] bg-[#d6b57a26] px-6 py-3 text-xs uppercase tracking-[0.18em] text-[#f4e3be] hover:bg-[#d6b57a38]"
+          >
+            Отправить смету
+          </button>
         </div>
       </div>
     </section>

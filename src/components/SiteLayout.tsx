@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Footer from "@/components/Footer";
 import BrandLogo from "@/components/BrandLogo";
+import { siteContacts } from "@/content/siteData";
 
 interface SiteLayoutProps {
   branch: "host" | "agency";
@@ -51,9 +53,22 @@ const routeTabs = [
 
 const SiteLayout = ({ branch, ctaLabel, ctaHref, navigationBasePath, children }: SiteLayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [quickOpen, setQuickOpen] = useState(false);
+  const [quickName, setQuickName] = useState("");
+  const [quickPhone, setQuickPhone] = useState("");
+  const [quickComment, setQuickComment] = useState("");
+  const [quickChannel, setQuickChannel] = useState<"whatsapp" | "telegram" | "phone">("whatsapp");
   const location = useLocation();
   const ui = branchUi[branch];
   const sectionNav = useMemo(() => branchNav[branch], [branch]);
+  const whatsappLink = useMemo(
+    () => siteContacts.socials.find((item) => item.label === "WhatsApp")?.href ?? siteContacts.phoneLink,
+    [],
+  );
+  const telegramLink = useMemo(
+    () => siteContacts.socials.find((item) => item.label === "Telegram")?.href ?? siteContacts.phoneLink,
+    [],
+  );
 
   useEffect(() => {
     setMobileOpen(false);
@@ -69,6 +84,36 @@ const SiteLayout = ({ branch, ctaLabel, ctaHref, navigationBasePath, children }:
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
+
+  const submitQuickLead = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const text = [
+      "Здравствуйте! Заявка с кнопки «Связаться».",
+      `Направление: ${branch === "host" ? "Ведущий" : "Агентство"}`,
+      `Имя: ${quickName}`,
+      `Телефон: ${quickPhone}`,
+      `Комментарий: ${quickComment || "-"}`,
+    ].join("\n");
+
+    if (quickChannel === "whatsapp") {
+      const base = whatsappLink.includes("?") ? `${whatsappLink}&` : `${whatsappLink}?`;
+      window.open(`${base}text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+    }
+
+    if (quickChannel === "telegram") {
+      window.open(telegramLink, "_blank", "noopener,noreferrer");
+      navigator.clipboard?.writeText(text).catch(() => undefined);
+    }
+
+    if (quickChannel === "phone") {
+      window.location.href = siteContacts.phoneLink;
+    }
+
+    setQuickOpen(false);
+    setQuickName("");
+    setQuickPhone("");
+    setQuickComment("");
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -118,15 +163,16 @@ const SiteLayout = ({ branch, ctaLabel, ctaHref, navigationBasePath, children }:
             })}
           </nav>
 
-          <a
-            href={ctaHref}
+          <button
+            type="button"
+            onClick={() => setQuickOpen(true)}
             className={cn(
               "interactive ml-2 hidden rounded-full border px-5 py-2.5 text-[11px] uppercase tracking-[0.16em] transition-colors md:inline-flex",
               ui.button,
             )}
           >
             {ctaLabel}
-          </a>
+          </button>
 
           <button
             type="button"
@@ -168,22 +214,123 @@ const SiteLayout = ({ branch, ctaLabel, ctaHref, navigationBasePath, children }:
                 </a>
               ))}
             </nav>
-            <a
-              href={ctaHref}
-              onClick={() => setMobileOpen(false)}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                setQuickOpen(true);
+              }}
               className={cn(
                 "interactive mt-4 inline-flex rounded-full border px-5 py-2.5 text-xs uppercase tracking-[0.16em]",
                 ui.button,
               )}
             >
               {ctaLabel}
-            </a>
+            </button>
           </div>
         )}
       </header>
 
       <main className="pt-[74px]">{children}</main>
       <Footer />
+
+      <AnimatePresence>
+        {quickOpen && (
+          <motion.div
+            className="fixed inset-0 z-[140] flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <button
+              type="button"
+              onClick={() => setQuickOpen(false)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              aria-label="Закрыть окно связи"
+            />
+            <motion.form
+              onSubmit={submitQuickLead}
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 14, scale: 0.98 }}
+              className="relative w-full max-w-lg rounded-2xl border border-[#d6b57a66] bg-[#0d111be6] p-6"
+            >
+              <button
+                type="button"
+                onClick={() => setQuickOpen(false)}
+                className="interactive absolute right-3 top-3 rounded-full border border-white/20 p-2 text-[#f2dfbe]"
+                aria-label="Закрыть"
+              >
+                <X className="h-4 w-4" />
+              </button>
+
+              <h3 className="font-display text-4xl tracking-[0.08em] text-[#f5e7cb]">Связаться</h3>
+              <p className="mt-1 text-sm text-[#b2b6c4]">Оставьте контакт и выберите канал связи.</p>
+
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <input
+                  required
+                  value={quickName}
+                  onChange={(event) => setQuickName(event.target.value)}
+                  className="rounded-xl border border-white/15 bg-[#111521] px-4 py-3 text-sm text-[#f2e2c3] outline-none focus:border-[#d6b57a99]"
+                  placeholder="Имя"
+                />
+                <input
+                  required
+                  value={quickPhone}
+                  onChange={(event) => setQuickPhone(event.target.value)}
+                  className="rounded-xl border border-white/15 bg-[#111521] px-4 py-3 text-sm text-[#f2e2c3] outline-none focus:border-[#d6b57a99]"
+                  placeholder="Телефон"
+                />
+              </div>
+
+              <textarea
+                value={quickComment}
+                onChange={(event) => setQuickComment(event.target.value)}
+                className="mt-3 min-h-[104px] w-full rounded-xl border border-white/15 bg-[#111521] px-4 py-3 text-sm text-[#f2e2c3] outline-none focus:border-[#d6b57a99]"
+                placeholder="Коротко о задаче"
+              />
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                {[
+                  { id: "whatsapp", label: "WhatsApp" },
+                  { id: "telegram", label: "Telegram" },
+                  { id: "phone", label: "Телефон" },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setQuickChannel(item.id as "whatsapp" | "telegram" | "phone")}
+                    className={`interactive rounded-full border px-4 py-2 text-xs uppercase tracking-[0.16em] ${
+                      quickChannel === item.id
+                        ? "border-[#d6b57a99] bg-[#d6b57a26] text-[#f2dfbe]"
+                        : "border-white/20 bg-[#121622] text-[#c9ccda] hover:border-[#d6b57a66]"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-3">
+                <button
+                  type="submit"
+                  className="interactive rounded-full border border-[#d6b57a99] bg-[#d6b57a26] px-6 py-3 text-xs uppercase tracking-[0.16em] text-[#f5e7cb] hover:bg-[#d6b57a38]"
+                >
+                  Отправить
+                </button>
+                <a
+                  href={ctaHref}
+                  className="interactive rounded-full border border-white/20 px-6 py-3 text-xs uppercase tracking-[0.16em] text-[#c7cada] hover:border-[#d6b57a66] hover:text-[#f2dfbe]"
+                  onClick={() => setQuickOpen(false)}
+                >
+                  К полной форме
+                </a>
+              </div>
+            </motion.form>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

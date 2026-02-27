@@ -1,9 +1,6 @@
-const socials = [
-  { label: "Instagram", href: "https://instagram.com" },
-  { label: "VK", href: "https://vk.com" },
-  { label: "WhatsApp", href: "https://wa.me/79990000000" },
-  { label: "Telegram", href: "https://t.me" },
-];
+import { siteContacts } from "@/content/siteData";
+
+const socials = siteContacts.socials.filter((item) => item.label !== "Instagram");
 
 const CTA = () => {
   return (
@@ -17,7 +14,7 @@ const CTA = () => {
 
           <div className="mt-8 flex flex-wrap gap-3">
             <a
-              href="https://t.me"
+              href={siteContacts.socials.find((item) => item.label === "Telegram")?.href ?? siteContacts.phoneLink}
               target="_blank"
               rel="noreferrer"
               className="rounded-full border border-transparent bg-accent px-7 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-accent-foreground transition-colors hover:bg-accent/85"
@@ -25,7 +22,7 @@ const CTA = () => {
               Написать
             </a>
             <a
-              href="tel:+79990000000"
+              href={siteContacts.phoneLink}
               className="rounded-full border border-white/38 bg-black/30 px-7 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-white transition-colors hover:border-white/65"
             >
               Позвонить

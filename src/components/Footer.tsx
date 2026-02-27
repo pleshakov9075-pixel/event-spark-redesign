@@ -10,6 +10,10 @@ const VkIcon = () => (
 );
 
 const Footer = () => {
+  const whatsapp = siteContacts.socials.find((item) => item.label === "WhatsApp");
+  const telegram = siteContacts.socials.find((item) => item.label === "Telegram");
+  const vk = siteContacts.socials.find((item) => item.label === "VK");
+
   return (
     <footer className="border-t border-white/10 bg-[#07090f] px-6 py-12 sm:py-14">
       <div className="mx-auto max-w-7xl">
@@ -56,39 +60,43 @@ const Footer = () => {
               <a href={siteContacts.phoneLink} className="interactive hover:text-[#f1dfbe]">
                 {siteContacts.phone}
               </a>
-              <a href={siteContacts.emailLink} className="interactive hover:text-[#f1dfbe]">
-                {siteContacts.email}
-              </a>
               <p>{siteContacts.city}</p>
+              <p className="text-xs text-[#9fa3b1]">{siteContacts.cityExtended}</p>
             </div>
             <div className="mt-5 flex items-center gap-3">
-              <a
-                href={siteContacts.socials[0].href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="interactive inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-[#d4c29b] hover:border-[#d6b57a80] hover:bg-[#d6b57a20]"
-                aria-label="Telegram"
-              >
-                <Send className="h-4 w-4" />
-              </a>
-              <a
-                href={siteContacts.socials[1].href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="interactive inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-[#d4c29b] hover:border-[#d6b57a80] hover:bg-[#d6b57a20]"
-                aria-label="WhatsApp"
-              >
-                <MessageCircle className="h-4 w-4" />
-              </a>
-              <a
-                href={siteContacts.socials[2].href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="interactive inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-[#d4c29b] hover:border-[#d6b57a80] hover:bg-[#d6b57a20]"
-                aria-label="VK"
-              >
-                <VkIcon />
-              </a>
+              {whatsapp && (
+                <a
+                  href={whatsapp.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="interactive inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-[#d4c29b] hover:border-[#d6b57a80] hover:bg-[#d6b57a20]"
+                  aria-label="WhatsApp"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                </a>
+              )}
+              {telegram && (
+                <a
+                  href={telegram.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="interactive inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-[#d4c29b] hover:border-[#d6b57a80] hover:bg-[#d6b57a20]"
+                  aria-label="Telegram"
+                >
+                  <Send className="h-4 w-4" />
+                </a>
+              )}
+              {vk && (
+                <a
+                  href={vk.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="interactive inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-[#d4c29b] hover:border-[#d6b57a80] hover:bg-[#d6b57a20]"
+                  aria-label="VK"
+                >
+                  <VkIcon />
+                </a>
+              )}
             </div>
           </div>
         </div>

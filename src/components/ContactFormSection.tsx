@@ -1,6 +1,6 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { MessageCircle, Phone, Send, X } from "lucide-react";
 import { siteContacts } from "@/content/siteData";
 
 interface ContactFormSectionProps {
@@ -9,28 +9,56 @@ interface ContactFormSectionProps {
   subtitle: string;
 }
 
+type ContactChannel = "whatsapp" | "telegram" | "phone";
+
 const eventTypeOptions = ["Свадьба", "Корпоратив", "Приватное событие", "Форум / конференция", "Другое"];
 
 const ContactFormSection = ({ id, title, subtitle }: ContactFormSectionProps) => {
+  const whatsapp = useMemo(
+    () => siteContacts.socials.find((item) => item.label === "WhatsApp")?.href ?? siteContacts.phoneLink,
+    [],
+  );
+  const telegram = useMemo(
+    () => siteContacts.socials.find((item) => item.label === "Telegram")?.href ?? siteContacts.phoneLink,
+    [],
+  );
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [eventType, setEventType] = useState(eventTypeOptions[0]);
   const [comment, setComment] = useState("");
+  const [channel, setChannel] = useState<ContactChannel>("whatsapp");
   const [thanksOpen, setThanksOpen] = useState(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const body = [
+  const buildLeadText = () =>
+    [
+      "Здравствуйте! Новая заявка с сайта.",
       `Имя: ${name}`,
       `Телефон: ${phone}`,
-      `Email: ${email}`,
+      `Email: ${email || "-"}`,
       `Тип события: ${eventType}`,
       `Комментарий: ${comment || "-"}`,
     ].join("\n");
 
-    window.location.href = `${siteContacts.emailLink}?subject=${encodeURIComponent("Новая заявка с сайта")}&body=${encodeURIComponent(body)}`;
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const text = buildLeadText();
+
+    if (channel === "whatsapp") {
+      const base = whatsapp.includes("?") ? `${whatsapp}&` : `${whatsapp}?`;
+      window.open(`${base}text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+    }
+
+    if (channel === "telegram") {
+      window.open(telegram, "_blank", "noopener,noreferrer");
+      navigator.clipboard?.writeText(text).catch(() => undefined);
+    }
+
+    if (channel === "phone") {
+      window.location.href = siteContacts.phoneLink;
+    }
+
     setThanksOpen(true);
   };
 
@@ -43,15 +71,28 @@ const ContactFormSection = ({ id, title, subtitle }: ContactFormSectionProps) =>
           <div className="mt-6 flex flex-wrap gap-3">
             <a
               href={siteContacts.phoneLink}
-              className="interactive rounded-full border border-[#d6b57a80] bg-[#d6b57a1f] px-6 py-3 text-xs uppercase tracking-[0.18em] text-[#f5e7cb] hover:bg-[#d6b57a33]"
+              className="interactive inline-flex items-center gap-2 rounded-full border border-[#d6b57a80] bg-[#d6b57a1f] px-6 py-3 text-xs uppercase tracking-[0.18em] text-[#f5e7cb] hover:bg-[#d6b57a33]"
             >
+              <Phone className="h-3.5 w-3.5" />
               Позвонить
             </a>
             <a
-              href={siteContacts.emailLink}
-              className="interactive rounded-full border border-white/20 bg-[#141722] px-6 py-3 text-xs uppercase tracking-[0.18em] text-[#d6d8e2] hover:border-[#d6b57a66] hover:text-[#f5e7cb]"
+              href={whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="interactive inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#141722] px-6 py-3 text-xs uppercase tracking-[0.18em] text-[#d6d8e2] hover:border-[#d6b57a66] hover:text-[#f5e7cb]"
             >
-              Написать на email
+              <MessageCircle className="h-3.5 w-3.5" />
+              WhatsApp
+            </a>
+            <a
+              href={telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="interactive inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#141722] px-6 py-3 text-xs uppercase tracking-[0.18em] text-[#d6d8e2] hover:border-[#d6b57a66] hover:text-[#f5e7cb]"
+            >
+              <Send className="h-3.5 w-3.5" />
+              Telegram
             </a>
           </div>
         </div>
@@ -86,7 +127,6 @@ const ContactFormSection = ({ id, title, subtitle }: ContactFormSectionProps) =>
               Email
               <input
                 type="email"
-                required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 className="rounded-xl border border-white/15 bg-[#111521] px-4 py-3 text-sm text-[#f2e2c3] outline-none transition-colors focus:border-[#d6b57a99]"
@@ -108,6 +148,30 @@ const ContactFormSection = ({ id, title, subtitle }: ContactFormSectionProps) =>
                 ))}
               </select>
             </label>
+          </div>
+
+          <div className="mt-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-[#b5b8c6]">Куда отправить заявку</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {[
+                { id: "whatsapp", label: "WhatsApp" },
+                { id: "telegram", label: "Telegram" },
+                { id: "phone", label: "Телефонный звонок" },
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setChannel(item.id as ContactChannel)}
+                  className={`interactive rounded-full border px-4 py-2 text-xs uppercase tracking-[0.16em] ${
+                    channel === item.id
+                      ? "border-[#d6b57a99] bg-[#d6b57a26] text-[#f2dfbe]"
+                      : "border-white/20 bg-[#121622] text-[#c9ccda] hover:border-[#d6b57a66]"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <label className="mt-4 grid gap-2 text-xs uppercase tracking-[0.18em] text-[#b5b8c6]">
@@ -162,7 +226,7 @@ const ContactFormSection = ({ id, title, subtitle }: ContactFormSectionProps) =>
                 <X className="h-4 w-4" />
               </button>
               <h4 className="font-display text-4xl tracking-[0.08em] text-[#f5e7cb]">Спасибо</h4>
-              <p className="mt-2 text-sm text-[#b3b6c4]">Заявка отправлена. Свяжемся с вами в ближайшее время.</p>
+              <p className="mt-2 text-sm text-[#b3b6c4]">Заявка отправлена. Свяжемся с вами через выбранный канал.</p>
             </motion.div>
           </motion.div>
         )}

@@ -5,15 +5,17 @@ export const brandAssets = {
 };
 
 export const siteContacts = {
-  phone: "+7 (999) 000-00-00",
-  phoneLink: "tel:+79990000000",
-  email: "hello@artbox-event.ru",
-  emailLink: "mailto:hello@artbox-event.ru",
+  phone: "8 (919) 905-20-35",
+  phoneLink: "tel:+79199052035",
   city: "Ижевск, работа по России",
+  cityExtended: "Выезжаем в Москву, Казань, Пермь, Тюмень и на частные площадки по всей России.",
   socials: [
-    { label: "Telegram", href: "https://t.me/" },
-    { label: "WhatsApp", href: "https://wa.me/79990000000" },
-    { label: "VK", href: "https://vk.com/" },
+    {
+      label: "WhatsApp",
+      href: "https://wa.me/79199052035?text=Здравствуйте!+Хочу+проконсультироваться+по+мероприятию.",
+    },
+    { label: "Telegram", href: "https://t.me/VladimirBashmakov" },
+    { label: "VK", href: "https://vk.com/yozhmc" },
   ],
 };
 

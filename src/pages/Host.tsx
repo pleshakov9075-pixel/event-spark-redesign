@@ -8,11 +8,66 @@ import VideoShowcase from "@/components/VideoShowcase";
 import ContactFormSection from "@/components/ContactFormSection";
 import { hostHero, hostVideoTiles } from "@/content/siteData";
 
-const services = [
-  { title: "Свадьбы", description: "Авторская драматургия вечера, мягкий темп и живые интерактивы." },
-  { title: "Корпоративы", description: "Энергия, командная динамика и интеллигентный юмор без перегруза." },
-  { title: "Частные события", description: "Камерные ужины, юбилеи и вечера, где важна атмосфера и такт." },
-  { title: "Форумы и премии", description: "Сценическая уверенность, работа с аудиторией и точный тайминг." },
+const keyBenefits = [
+  {
+    title: "Счастливые гости",
+    text: "Создаю атмосферу, где гости активно участвуют, чувствуют себя комфортно и уходят с настоящими эмоциями.",
+  },
+  {
+    title: "Интерактив про пару",
+    text: "Собираю информацию о женихе и невесте (или юбилярах) заранее и органично вплетаю это в программу.",
+  },
+  {
+    title: "Универсальная программа",
+    text: "Сценарий подходит гостям разных возрастов и темпераментов: вовлекаю без неловких пауз и перегруза.",
+  },
+  {
+    title: "Персонализированная церемония",
+    text: "Каждый вечер пишется под заказчиков как живая история, а не шаблонный набор конкурсов.",
+  },
+];
+
+const formatCards = [
+  {
+    title: "Свадьбы",
+    description: "Авторская драматургия вечера, мягкий темп и живые интерактивы.",
+    photos: [
+      "/media/host/photos/host-red-stage.webp",
+      "/media/host/photos/host-red-with-guest.webp",
+      "/media/host/photos/host-group-photo.webp",
+      "/media/host/photos/1771868102_699c8fc60c624.webp",
+    ],
+  },
+  {
+    title: "Корпоративы",
+    description: "Энергия, командная динамика и интеллигентный юмор без перегруза.",
+    photos: [
+      "/media/host/photos/host-mic-audience.webp",
+      "/media/host/photos/host-event-arms-open.webp",
+      "/media/host/photos/host-backstage-smile.webp",
+      "/media/host/photos/host-group-photo.webp",
+    ],
+  },
+  {
+    title: "Частные события",
+    description: "Камерные ужины, юбилеи и вечера, где важна атмосфера и такт.",
+    photos: [
+      "/media/host/photos/host-red-portrait.webp",
+      "/media/host/photos/host-stage-collage.webp",
+      "/media/host/photos/host-red-with-guest.webp",
+      "/media/host/photos/host-backstage-smile.webp",
+    ],
+  },
+  {
+    title: "Форумы и премии",
+    description: "Сценическая уверенность, работа с аудиторией и точный тайминг.",
+    photos: [
+      "/media/host/photos/host-forum-sochi-2025.webp",
+      "/media/host/photos/host-forum-global-2024.webp",
+      "/media/host/photos/host-forum-stage-2024.webp",
+      "/media/host/photos/host-mic-audience.webp",
+    ],
+  },
 ];
 
 const testimonials = [
@@ -37,14 +92,13 @@ const Host = () => {
 
   return (
     <SiteLayout branch="host" ctaLabel="Связаться" ctaHref="#host-contacts">
-      <section className="relative min-h-[calc(100vh-4rem)]">
+      <section className="relative min-h-[calc(100vh-4rem)] bg-[#080b12]">
         <HeroVideo
           src={hostHero.video}
-          poster={hostHero.poster}
           finalFrameSrc={hostHero.finalFrame}
           loop
           showFinalFrameOnEnd={false}
-          overlayClassName="bg-[linear-gradient(180deg,rgba(6,7,11,0.18)_0%,rgba(8,10,15,0.72)_68%,rgba(8,10,15,0.95)_100%)]"
+          overlayClassName="bg-[linear-gradient(180deg,rgba(6,7,11,0.28)_0%,rgba(8,10,15,0.76)_68%,rgba(8,10,15,0.96)_100%)]"
         >
           <div className="absolute inset-0 flex items-end">
             <div className="mx-auto w-full max-w-7xl px-6 pb-14 sm:pb-20">
@@ -88,7 +142,25 @@ const Host = () => {
         </div>
       </section>
 
-      <section id="host-photos" className="bg-[#0d1018] px-6 py-16 sm:py-24">
+      <section className="bg-[#0d1018] px-6 py-16 sm:py-24">
+        <div className="mx-auto w-full max-w-7xl">
+          <ScrollReveal>
+            <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Что получает заказчик</h3>
+          </ScrollReveal>
+          <div className="mt-7 grid gap-4 md:grid-cols-2">
+            {keyBenefits.map((item, index) => (
+              <ScrollReveal key={item.title} delay={index * 0.04}>
+                <article className="rounded-2xl border border-white/10 bg-[#10131bcc] p-6">
+                  <h4 className="font-display text-3xl tracking-[0.05em] text-[#f5e6c8]">{item.title}</h4>
+                  <p className="mt-2 text-sm leading-relaxed text-[#afb1be]">{item.text}</p>
+                </article>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="host-photos" className="px-6 py-16 sm:py-24">
         <div className="mx-auto w-full max-w-7xl">
           <ScrollReveal>
             <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Фото</h3>
@@ -102,7 +174,7 @@ const Host = () => {
         </div>
       </section>
 
-      <section id="host-video" className="px-6 py-16 sm:py-24">
+      <section id="host-video" className="bg-[#0d1018] px-6 py-16 sm:py-24">
         <div className="mx-auto w-full max-w-7xl">
           <ScrollReveal>
             <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Видео</h3>
@@ -114,17 +186,29 @@ const Host = () => {
         </div>
       </section>
 
-      <section id="host-formats" className="bg-[#0d1018] px-6 py-16 sm:py-24">
+      <section id="host-formats" className="px-6 py-16 sm:py-24">
         <div className="mx-auto w-full max-w-7xl">
           <ScrollReveal>
             <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Форматы</h3>
           </ScrollReveal>
-          <div className="mt-7 grid gap-4 md:grid-cols-2">
-            {services.map((service, index) => (
-              <ScrollReveal key={service.title} delay={index * 0.05}>
-                <article className="rounded-2xl border border-white/10 bg-[#11131bd1] p-6">
-                  <h4 className="font-display text-3xl tracking-[0.05em] text-[#f5e6c8]">{service.title}</h4>
-                  <p className="mt-2 text-sm leading-relaxed text-[#afb1be]">{service.description}</p>
+          <div className="mt-7 grid gap-5">
+            {formatCards.map((card, index) => (
+              <ScrollReveal key={card.title} delay={index * 0.04}>
+                <article className="rounded-2xl border border-white/10 bg-[#11131bcc] p-5 sm:p-6">
+                  <h4 className="font-display text-3xl tracking-[0.05em] text-[#f5e6c8]">{card.title}</h4>
+                  <p className="mt-2 text-sm leading-relaxed text-[#afb1be]">{card.description}</p>
+                  <div className="no-scrollbar mt-4 flex gap-3 overflow-x-auto pb-1">
+                    {card.photos.map((photo) => (
+                      <img
+                        key={photo}
+                        src={photo}
+                        alt={`${card.title} — фото`}
+                        className="h-52 w-auto min-w-[170px] rounded-xl border border-white/10 object-contain bg-[#0e1118] p-1"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ))}
+                  </div>
                 </article>
               </ScrollReveal>
             ))}
@@ -132,7 +216,7 @@ const Host = () => {
         </div>
       </section>
 
-      <section id="host-reviews" className="px-6 py-16 sm:py-24">
+      <section id="host-reviews" className="bg-[#0d1018] px-6 py-16 sm:py-24">
         <div className="mx-auto w-full max-w-7xl">
           <ScrollReveal>
             <h3 className="font-display text-4xl tracking-[0.08em] text-[#f2dfbe] sm:text-5xl">Отзывы</h3>
