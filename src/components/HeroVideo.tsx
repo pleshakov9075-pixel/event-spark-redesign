@@ -98,7 +98,7 @@ const HeroVideo = ({
         >
           <span className="flex items-center gap-2 rounded-full border border-[#f0d8ac66] bg-[#11121abf] px-5 py-3 text-sm uppercase tracking-[0.18em] text-[#f0d8ac]">
             <Play className="h-4 w-4" />
-            Play
+            Воспроизвести
           </span>
         </button>
       )}

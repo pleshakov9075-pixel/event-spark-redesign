@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import BrandLogo from "@/components/BrandLogo";
 
 const navItems = [
   { label: "Главная", to: "/" },
@@ -48,12 +49,8 @@ const Navbar = ({ cta, accent = "default" }: NavbarProps) => {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
         {/* Logo / Home link */}
-        <Link
-          to="/"
-          className="text-xl sm:text-2xl text-foreground hover:text-primary transition-colors interactive italic"
-          style={{ fontFamily: "'Cormorant Garamond', serif" }}
-        >
-          V.B. & Art-Box
+        <Link to="/" className="interactive" aria-label="На главную">
+          <BrandLogo className="w-[136px] sm:w-[150px]" />
         </Link>
 
         {/* Desktop nav */}

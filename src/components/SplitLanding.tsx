@@ -20,7 +20,7 @@ const sideMeta: Record<
     title: "Ведущий\nВладимир Башмаков",
     subtitle: "живой ритм, эмоция, личный контакт",
     route: "/host",
-    bgImage: "/media/landing/home-host-choice.jpg",
+    bgImage: "/media/landing/home-host-choice.webp",
     clipPath: "polygon(0 0, 59% 0, 43% 100%, 0 100%)",
     accent: "from-[#1f3147a6] to-[#0d1119e6]",
   },
@@ -28,7 +28,7 @@ const sideMeta: Record<
     title: "Ивент-агентство\nArtbox",
     subtitle: "концепция, продакшн, премиальная реализация",
     route: "/agency",
-    bgImage: "/media/landing/home-agency-choice.jpg",
+    bgImage: "/media/landing/home-agency-choice.webp",
     clipPath: "polygon(59% 0, 100% 0, 100% 100%, 43% 100%)",
     accent: "from-[#1f1712cc] to-[#111015db]",
   },
@@ -132,7 +132,18 @@ const SplitLanding = () => {
               decoding="async"
             />
             <div className={`absolute inset-0 bg-gradient-to-b ${sideData.accent}`} />
-            <div className="absolute inset-0 bg-black/34" />
+            <motion.div
+              className="absolute inset-0 bg-black/34"
+              animate={{
+                opacity:
+                  hovered && hovered !== side && !selected
+                    ? 0.56
+                    : isHovered && !selected
+                      ? 0.22
+                      : 0.34,
+              }}
+              transition={{ duration: 0.24 }}
+            />
             <motion.div
               className="absolute inset-0"
               animate={{ opacity: isHovered && !selected ? 1 : 0 }}
@@ -150,7 +161,9 @@ const SplitLanding = () => {
                 side === "host" ? "left-0 sm:left-4" : "right-0 text-right sm:right-4"
               }`}
             >
-              <p className="text-[11px] uppercase tracking-[0.3em] text-[#d7c5a2]">{side === "host" ? "Host" : "Agency"}</p>
+              <p className="text-[11px] uppercase tracking-[0.3em] text-[#d7c5a2]">
+                {side === "host" ? "Ведущий" : "Агентство"}
+              </p>
               <h1 className="mt-4 whitespace-pre-line font-display text-5xl leading-[0.9] tracking-[0.06em] text-[#f5e5c8] sm:text-7xl">
                 {sideData.title}
               </h1>

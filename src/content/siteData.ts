@@ -1,3 +1,9 @@
+export const brandAssets = {
+  logoWebp: "/media/logo/artbox-logo-main.webp",
+  logoPng: "/media/logo/artbox-logo-main.png",
+  logoFallback: "/media/logo/artbox-logo.svg",
+};
+
 export const siteContacts = {
   phone: "+7 (999) 000-00-00",
   phoneLink: "tel:+79990000000",
@@ -13,148 +19,177 @@ export const siteContacts = {
 
 export const hostHero = {
   video: "/media/videos/host-hero.mp4",
-  poster: "/media/images/host-hero-poster.jpg",
+  poster: "/media/images/host-hero-poster.webp",
   finalFrame: "/images/host-hero.png",
 };
 
 export const agencyHero = {
   video: "/media/videos/agency-hero.mp4",
-  poster: "/media/images/agency-hero-poster.jpg",
-  finalFrame: "/images/agency-hero.jpg",
-  logo: "/media/logo/artbox-logo-main.png",
-  logoFallback: "/media/logo/artbox-logo.svg",
+  poster: "/media/images/agency-hero-poster.webp",
+  finalFrame: "/images/agency-hero.webp",
+  logo: brandAssets.logoWebp,
+  logoFallback: brandAssets.logoPng,
 };
-
-export type HostPhotoVariant = "accent" | "wide" | "tall" | "square";
 
 export type HostPhotoItem = {
   src: string;
   alt: string;
-  label: string;
-  variant: HostPhotoVariant;
+  title: string;
   accent?: boolean;
 };
 
 export const hostPhotoShowcase: HostPhotoItem[] = [
   {
-    src: "/media/host/photos/1771868102_699c8fc60c624.jpg",
+    src: "/media/host/photos/1771868102_699c8fc60c624.webp",
     alt: "Черно-белый портрет Владимира Башмакова",
-    label: "Ч/Б акцент",
-    variant: "accent",
+    title: "Шоумен",
     accent: true,
   },
   {
-    src: "/media/host/photos/host-forum-sochi-2025.jpg",
-    alt: "Афиша Event Forum GS 2025",
-    label: "Event Forum",
-    variant: "square",
+    src: "/media/host/photos/host-forum-sochi-2025.webp",
+    alt: "Афиша форума в Сочи с участием Владимира Башмакова",
+    title: "Форум GS 2025",
   },
   {
-    src: "/media/host/photos/host-forum-global-2024.jpg",
+    src: "/media/host/photos/host-forum-global-2024.webp",
     alt: "Афиша Global Event Forum 2024",
-    label: "Global Event Forum",
-    variant: "square",
+    title: "GEF 2024",
   },
   {
-    src: "/media/host/photos/host-event-arms-open.jpg",
+    src: "/media/host/photos/host-event-arms-open.webp",
     alt: "Владимир на мероприятии с поднятыми руками",
-    label: "Живой зал",
-    variant: "wide",
+    title: "Энергия зала",
   },
   {
-    src: "/media/host/photos/host-stage-collage.jpg",
-    alt: "Коллаж выступления Владимира на сцене",
-    label: "Сцена",
-    variant: "wide",
+    src: "/media/host/photos/host-stage-collage.webp",
+    alt: "Владимир ведет интерактив на сцене",
+    title: "Сцена",
   },
   {
-    src: "/media/host/photos/host-forum-stage-2024.jpg",
-    alt: "Владимир на форуме в Сочи 2024",
-    label: "Форум / Live",
-    variant: "wide",
+    src: "/media/host/photos/host-forum-stage-2024.webp",
+    alt: "Владимир выступает на форуме в Сочи",
+    title: "Форум 2024",
   },
   {
-    src: "/media/host/photos/host-mic-audience.jpg",
-    alt: "Владимир ведет программу в зале",
-    label: "В зале",
-    variant: "wide",
+    src: "/media/host/photos/host-mic-audience.webp",
+    alt: "Работа с микрофоном и аудиторией",
+    title: "Диалог с залом",
   },
   {
-    src: "/media/host/photos/host-red-with-guest.jpg",
-    alt: "Владимир в красном костюме с гостьей",
-    label: "Afterparty",
-    variant: "tall",
+    src: "/media/host/photos/host-red-with-guest.webp",
+    alt: "Владимир в красном костюме на afterparty",
+    title: "Афтепати",
   },
   {
-    src: "/media/host/photos/host-red-portrait.jpg",
+    src: "/media/host/photos/host-red-portrait.webp",
     alt: "Портрет Владимира в красном костюме",
-    label: "Editorial",
-    variant: "tall",
+    title: "Портрет",
   },
   {
-    src: "/media/host/photos/host-group-photo.jpg",
-    alt: "Групповое фото с Владимиром",
-    label: "Команда и гости",
-    variant: "wide",
+    src: "/media/host/photos/host-group-photo.webp",
+    alt: "Групповое фото с гостями",
+    title: "Команда и гости",
   },
   {
-    src: "/media/host/photos/host-backstage-smile.jpg",
-    alt: "Владимир с гостем на мероприятии",
-    label: "Backstage",
-    variant: "square",
+    src: "/media/host/photos/host-backstage-smile.webp",
+    alt: "Владимир улыбается с гостем за кулисами",
+    title: "Бэкстейдж",
   },
   {
-    src: "/media/host/photos/host-red-stage.jpg",
+    src: "/media/host/photos/host-red-stage.webp",
     alt: "Владимир на красной сцене",
-    label: "Красная сцена",
-    variant: "tall",
+    title: "Красная сцена",
   },
 ];
 
 export const hostVideoTiles = [
   {
+    id: "host-open",
     title: "Энергичное открытие",
     src: "/media/videos/host-reel-01.mp4",
-    poster: "/assets/photo/vk/vk-009.jpg",
+    poster: "/media/host/photos/host-stage-collage.webp",
   },
   {
+    id: "host-dialog",
     title: "Диалог с залом",
     src: "/media/videos/host-reel-02.mp4",
-    poster: "/assets/photo/vk/vk-018.jpg",
+    poster: "/media/host/photos/host-mic-audience.webp",
   },
   {
+    id: "host-final",
     title: "Финал с эмоцией",
     src: "/media/videos/host-reel-03.mp4",
-    poster: "/assets/photo/vk/vk-030.jpg",
+    poster: "/media/host/photos/host-event-arms-open.webp",
   },
   {
+    id: "host-interactive",
     title: "Интерактив на сцене",
     src: "/media/videos/host-reel-04.mp4",
-    poster: "/assets/photo/vk/vk-046.jpg",
+    poster: "/media/host/photos/host-red-stage.webp",
   },
 ];
 
-export const agencyCaseTiles = [
+export type AgencyCaseItem = {
+  slug: string;
+  title: string;
+  summary: string;
+  heroImage: string;
+  challenge: string;
+  solution: string;
+  result: string;
+  gallery: string[];
+  video?: { src: string; poster: string; title: string };
+};
+
+export const agencyCases: AgencyCaseItem[] = [
   {
-    type: "image" as const,
+    slug: "premium-corporate",
     title: "Премиальный корпоратив",
-    src: "/images/event-corporate-1.jpg",
+    summary: "Вечер для компании с акцентом на имидж бренда и вовлечение команды.",
+    heroImage: "/images/event-corporate-1.webp",
+    challenge: "Собрать деловую аудиторию в теплой атмосфере и сохранить ритм без перегруза активностями.",
+    solution: "Сценарий из трёх актов: welcome, интерактивный блок, финальный wow-номер. Продакшн и режиссура под ключ.",
+    result: "Высокая вовлеченность гостей, сильный визуальный контент и стабильный темп программы весь вечер.",
+    gallery: ["/images/event-corporate-1.webp", "/images/event-gala.webp", "/images/event-dinner.webp"],
+    video: {
+      src: "/media/videos/agency-case-01.mp4",
+      poster: "/images/event-gala.webp",
+      title: "Иммерсивный вечер",
+    },
   },
   {
-    type: "video" as const,
-    title: "Иммерсивный вечер",
-    src: "/media/videos/agency-case-01.mp4",
-    poster: "/images/event-gala.jpg",
-  },
-  {
-    type: "image" as const,
+    slug: "wedding-production",
     title: "Свадебный продакшн",
-    src: "/images/event-wedding-2.jpg",
+    summary: "Авторская концепция свадьбы: от сценарного каркаса до визуального продакшна.",
+    heroImage: "/images/event-wedding-2.webp",
+    challenge: "Создать индивидуальный формат, который выглядит кинематографично и остаётся комфортным для гостей.",
+    solution: "Кураторская подготовка, эмоциональная драматургия вечера и синхронизация ведущего с режиссурой площадки.",
+    result: "Событие с цельной эстетикой и органичной атмосферой, где каждый блок логично усиливал следующий.",
+    gallery: ["/images/event-wedding-2.webp", "/images/event-wedding-1.webp", "/images/event-dinner.webp"],
+    video: {
+      src: "/media/videos/agency-case-02.mp4",
+      poster: "/images/event-dinner.webp",
+      title: "Камерный приватный ужин",
+    },
   },
   {
-    type: "video" as const,
-    title: "Камерный private dinner",
-    src: "/media/videos/agency-case-02.mp4",
-    poster: "/images/event-dinner.jpg",
+    slug: "birthday-concept",
+    title: "Концептуальный день рождения",
+    summary: "Приватный вечер с акцентом на персональный сценарий и иммерсивную подачу.",
+    heroImage: "/images/event-birthday.webp",
+    challenge: "Сделать камерный праздник выразительным и исключить шаблонный сценарий.",
+    solution: "Разработали уникальные интерактивы и визуальные акценты, собрали команду под конкретный формат события.",
+    result: "Гости получили насыщенный вечер с цельным настроением и высокой динамикой без пауз.",
+    gallery: ["/images/event-birthday.webp", "/images/event-gala.webp", "/images/event-dinner.webp"],
   },
 ];
+
+export const agencyCaseCards = agencyCases.map((item) => ({
+  slug: item.slug,
+  title: item.title,
+  summary: item.summary,
+  cover: item.heroImage,
+  video: item.video,
+}));
+
+export const getAgencyCaseBySlug = (slug: string) => agencyCases.find((item) => item.slug === slug);

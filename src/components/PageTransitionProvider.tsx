@@ -13,9 +13,9 @@ type PageTransitionContextType = {
   phase: LoaderPhase;
 };
 
-const ENTER_MS = 540;
-const HOLD_MS = 360;
-const EXIT_MS = 700;
+const ENTER_MS = 380;
+const HOLD_MS = 240;
+const EXIT_MS = 520;
 
 const STORAGE_KEY = "artbox-loader-seen-v1";
 

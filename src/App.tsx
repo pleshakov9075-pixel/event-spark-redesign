@@ -10,6 +10,7 @@ import { PageTransitionProvider } from "@/components/PageTransitionProvider";
 const Index = lazy(() => import("./pages/Index"));
 const Host = lazy(() => import("./pages/Host"));
 const Agency = lazy(() => import("./pages/Agency"));
+const AgencyCase = lazy(() => import("./pages/AgencyCase"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/host" element={<Host />} />
               <Route path="/agency" element={<Agency />} />
+              <Route path="/agency/cases/:slug" element={<AgencyCase />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
